@@ -1,0 +1,18 @@
+// THIS FILE IS AUTO-GENERATED
+
+Layer0
+{
+	shader "my project 1.shader"
+
+	//---- Fog ----
+	g_bFogEnabled "1"
+
+	//---- Texturing ----
+	AmbientOcculision "textures/Fabric045_2K-PNG/Fabric045_2K-PNG_AmbientOcclusion.png"
+	Color "textures/Fabric045_2K-PNG/Fabric045_2K-PNG_Color.png"
+	Normal "textures/Fabric045_2K-PNG/Fabric045_2K-PNG_NormalDX.png"
+	Roughness "textures/Fabric045_2K-PNG/Fabric045_2K-PNG_Roughness.png"
+
+	//---- Translucent ----
+	g_flOpacityScale "1.000"
+}
