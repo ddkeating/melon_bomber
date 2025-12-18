@@ -32,7 +32,7 @@
       {
         "__type": "Sandbox.BoxCollider",
         "__guid": "11e0f4ca-2de9-4d70-8e33-9c4f545ab939",
-        "Center": "0,0,39.36355",
+        "Center": "0,0,0",
         "Friction": null,
         "IsTrigger": false,
         "OnComponentDestroy": null,
@@ -45,7 +45,7 @@
         "OnObjectTriggerExit": null,
         "OnTriggerEnter": null,
         "OnTriggerExit": null,
-        "Scale": "52,52,133.2771",
+        "Scale": "50,50,47.2436",
         "Static": false,
         "Surface": null,
         "SurfaceVelocity": "0,0,0"
@@ -277,6 +277,7 @@
         "Name": "Point Light",
         "Position": "0,0,92.87659",
         "Tags": "light_point,light",
+        "Enabled": true,
         "Components": [
           {
             "__type": "Sandbox.PointLight",

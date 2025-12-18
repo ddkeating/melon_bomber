@@ -10,10 +10,7 @@
         "__type": "Sandbox.Citizen.CitizenAnimationHelper",
         "__guid": "b1b6f95b-c81d-4a82-bd1a-264126601fe2",
         "BodyWeight": 1,
-        "EyeSource": {
-          "_type": "gameobject",
-          "go": "826d16aa-80e9-45fe-bdf2-2d4e5a3d001b"
-        },
+        "EyeSource": null,
         "EyesWeight": 1,
         "HeadWeight": 1,
         "Height": null,
@@ -45,10 +42,6 @@
           "go": "db8bc5ef-bc54-42f7-bd5f-b32de39d45ca"
         },
         "GroundControl": 6,
-        "Head": {
-          "_type": "gameobject",
-          "go": "826d16aa-80e9-45fe-bdf2-2d4e5a3d001b"
-        },
         "MaxForce": 50,
         "OnComponentDestroy": null,
         "OnComponentDisabled": null,
@@ -167,13 +160,6 @@
             "UseAnimGraph": true
           }
         ]
-      },
-      {
-        "__guid": "826d16aa-80e9-45fe-bdf2-2d4e5a3d001b",
-        "Flags": 0,
-        "Name": "Head",
-        "Position": "-14.16888,0,67.019",
-        "Enabled": true
       }
     ],
     "__variables": [],

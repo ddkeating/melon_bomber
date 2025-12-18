@@ -140,6 +140,7 @@ public sealed class Bomb : Component
     private void CloneExplosion( Vector2 position )
     {
         var explosion = _explosion.Clone( position: new Vector3( position.x, position.y, 25 ), GameObject.WorldRotation );
+        explosion.NetworkSpawn();
         explosion.Enabled = true;
     }
 

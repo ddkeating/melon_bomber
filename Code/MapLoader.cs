@@ -15,7 +15,7 @@ public sealed class MapLoader : Component
     [Property] private SoundEvent _explosionSound;
     [Property] private GameObject _SmokePlayer;
     [Property] private GameObject _singleSmoke;
-    [Property] private GameObject _camera;
+    private GameObject _camera;
     private GameObject gridContainer;
     private GameObject tile;
     private CameraShake _cameraShake;
@@ -57,9 +57,10 @@ public sealed class MapLoader : Component
     // SANDBOX METHODS
     protected override void OnStart()
     {
-        if ( !Networking.IsHost ) return;
+        if (!Networking.IsHost) return;
         gridContainer = GameObject;
         gridContainer.LocalPosition = new Vector3( gridContainer.LocalPosition.x, gridContainer.LocalPosition.y, startingZPosition );
+        _camera = Scene.Camera.GameObject;
         _SmokePlayer.Enabled = false;
         _singleSmoke.Enabled = false;
         _cameraShake = _camera.GetComponent<CameraShake>();
@@ -72,7 +73,7 @@ public sealed class MapLoader : Component
 
     protected override void OnUpdate()
     {
-        if ( !Networking.IsHost ) return;
+        if ( !BomberManager.StartGame ) return;
         if ( !StartGeneratingMap && !MapGenerate )
         {
             GenerateMap();
@@ -101,7 +102,6 @@ public sealed class MapLoader : Component
 
     protected override void OnFixedUpdate()
     {
-        if ( Network.IsProxy ) return;
         if ( MapGenerate && !animationPlayed )
         {
             if ( !_soundOnePlayed )
@@ -229,6 +229,7 @@ public sealed class MapLoader : Component
 
         prefab.LocalScale = GridCellSize;
         var clonedPrefab = prefab.Clone( position: worldPosition );
+        clonedPrefab.NetworkSpawn();
         clonedPrefab.SetParent( gridContainer );
         return clonedPrefab;
     }
@@ -254,6 +255,7 @@ public sealed class MapLoader : Component
         {
             tile.WorldPosition = new Vector3( tile.WorldPosition.x, tile.WorldPosition.y, targetZPosition );
             var tileSmoke = _singleSmoke.Clone();
+            tileSmoke.NetworkSpawn();
             tileSmoke.WorldPosition = tile.WorldPosition + Vector3.Up * 10;
             tileSmoke.Enabled = true;
             _cameraShake.Shake( magnitude: 4 );

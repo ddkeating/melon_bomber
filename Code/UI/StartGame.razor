@@ -1,0 +1,47 @@
+@using Sandbox;
+@using Sandbox.UI;
+@inherits PanelComponent
+@namespace Sandbox
+
+<root>
+    <div class="background">
+        <div class="upper-container">
+            <div class="game-info">
+                <label class="game-title">Terry Bomber</label>
+                <label class="game-description">Time to go boom</label>
+            </div>
+            <button class="start-button" @onclick=@(() => BomberManager.StartGameButton())>
+                <h1>Start Game</h1>
+            </button>
+        </div>
+        <div class="lower-container">
+            <div class="players">
+                <!--Player Icons-->
+                <div class="player-circle">
+                </div>
+                <div class="player-circle">
+                </div>
+                <div class="player-circle">
+                </div>
+                <div class="player-circle">
+                </div>
+            </div>
+
+        </div>
+    </div>
+</root>
+
+@code
+{
+    protected override void OnUpdate()
+    {
+        if (BomberManager.StartGame)
+        {
+
+            Destroy();
+        }
+    }
+    /// <summary>
+    /// the hash determines if the system should be rebuilt. If it changes, it will be rebuilt
+    /// </summary>
+}
