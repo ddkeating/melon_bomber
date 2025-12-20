@@ -1,18 +1,30 @@
 {
   "RootObject": {
     "__guid": "9f303384-4566-4786-ac85-0cd16348fd8f",
+    "__version": 1,
     "Flags": 0,
     "Name": "indestructible walls",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
     "Tags": "indestructable",
     "Enabled": true,
+    "NetworkMode": 2,
+    "NetworkInterpolation": true,
+    "NetworkOrphaned": 0,
+    "NetworkTransmit": true,
+    "OwnerTransfer": 1,
     "Components": [
       {
         "__type": "Sandbox.ModelRenderer",
         "__guid": "7e08d12e-cd36-4794-970b-41bec1264d7e",
+        "__enabled": true,
         "BodyGroups": 18446744073709551615,
         "CreateAttachments": false,
+        "LodOverride": null,
         "MaterialGroup": null,
         "MaterialOverride": null,
+        "Materials": null,
         "Model": "models/lamp.vmdl",
         "OnComponentDestroy": null,
         "OnComponentDisabled": null,
@@ -26,13 +38,16 @@
           "BloomLayer": false,
           "AfterUILayer": false
         },
-        "RenderType": "On",
+        "RenderType": "Off",
         "Tint": "0.10698,0.10698,0.10698,1"
       },
       {
         "__type": "Sandbox.BoxCollider",
         "__guid": "11e0f4ca-2de9-4d70-8e33-9c4f545ab939",
-        "Center": "0,0,39.36355",
+        "__enabled": true,
+        "Center": "0,0,0",
+        "ColliderFlags": 0,
+        "Elasticity": null,
         "Friction": null,
         "IsTrigger": false,
         "OnComponentDestroy": null,
@@ -45,7 +60,8 @@
         "OnObjectTriggerExit": null,
         "OnTriggerEnter": null,
         "OnTriggerExit": null,
-        "Scale": "52,52,133.2771",
+        "RollingResistance": null,
+        "Scale": "50,50,47.2436",
         "Static": false,
         "Surface": null,
         "SurfaceVelocity": "0,0,0"
@@ -54,17 +70,25 @@
     "Children": [
       {
         "__guid": "48fec047-4a3a-42d6-9113-78512fbc76cf",
+        "__version": 1,
         "Flags": 0,
         "Name": "LampFlame",
         "Position": "0,0,86.72711",
         "Rotation": "0,-0.7071068,0,0.7071068",
+        "Scale": "1,1,1",
         "Tags": "particles",
         "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkInterpolation": true,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
         "Components": [
           {
             "__type": "Sandbox.ParticleEffect",
             "__guid": "87e32f3b-34ae-4bfe-8794-a1012d314e50",
-            "__version": 1,
+            "__enabled": true,
+            "__version": 3,
             "Alpha": 1,
             "ApplyAlpha": false,
             "ApplyColor": true,
@@ -75,9 +99,21 @@
             "Bumpiness": 0,
             "Collision": false,
             "CollisionIgnore": null,
+            "CollisionPrefab": null,
+            "CollisionPrefabAlign": false,
+            "CollisionPrefabChance": 1,
+            "CollisionPrefabRotation": 0,
             "CollisionRadius": 1,
+            "ConstantMovement": {
+              "X": 0,
+              "Y": 0,
+              "Z": 0
+            },
             "Damping": 0,
             "DieOnCollisionChance": 0,
+            "FollowerPrefab": null,
+            "FollowerPrefabChance": 1,
+            "FollowerPrefabKill": true,
             "Force": false,
             "ForceDirection": "0,0,0",
             "ForceScale": 1,
@@ -122,7 +158,13 @@
               "ConstantA": "1,1,1,1",
               "ConstantB": "1,1,1,1"
             },
+            "InitialVelocity": {
+              "X": 0,
+              "Y": 0,
+              "Z": 0
+            },
             "Lifetime": 2,
+            "LocalSpace": 0,
             "MaxParticles": 1000,
             "OnComponentDestroy": null,
             "OnComponentDisabled": null,
@@ -187,24 +229,26 @@
                   "out": 0,
                   "mode": "Mirrored"
                 }
-              ],
-              "Constants": "1,0,0,0"
+              ]
             },
             "SequenceId": 0,
             "SequenceSpeed": 1,
             "SequenceTime": 1,
             "SheetSequence": false,
-            "Space": "World",
             "StartDelay": 0,
             "StartVelocity": 1,
             "Stretch": 0,
             "TimeScale": 1,
+            "Timing": "GameTime",
             "Tint": "1,1,1,1",
+            "UsePrefabFeature": false,
             "Yaw": 0
           },
           {
             "__type": "Sandbox.ParticleSpriteRenderer",
             "__guid": "2e629976-dc9f-437a-978d-9b46c8ad6db5",
+            "__enabled": true,
+            "__version": 2,
             "Additive": true,
             "Alignment": "LookAtCamera",
             "BlurAmount": 0.5,
@@ -223,7 +267,7 @@
             "OnComponentStart": null,
             "OnComponentUpdate": null,
             "Opaque": false,
-            "Pivot": "0.5,0.5",
+            "PlaybackSpeed": 1,
             "RenderOptions": {
               "GameLayer": true,
               "OverlayLayer": false,
@@ -234,18 +278,42 @@
             "Scale": 0.62,
             "Shadows": false,
             "SortMode": "Unsorted",
-            "Texture": {
-              "$compiler": "texture",
-              "$source": "color",
+            "Sprite": {
+              "$compiler": "embed",
+              "$source": null,
               "data": {
-                "Color": "2,0.73504,0.14884,1"
+                "Animations": [
+                  {
+                    "Name": "Default",
+                    "FrameRate": 15,
+                    "Origin": "0.5,0.5",
+                    "LoopMode": "Loop",
+                    "Frames": [
+                      {
+                        "Texture": {
+                          "$compiler": "texture",
+                          "$source": "color",
+                          "data": {
+                            "Color": "2,0.73504,0.14884,1"
+                          },
+                          "compiled": null
+                        },
+                        "BroadcastMessages": []
+                      }
+                    ]
+                  }
+                ],
+                "__references": null
               },
               "compiled": null
-            }
+            },
+            "StartingAnimationName": "Default",
+            "TextureFilter": "Bilinear"
           },
           {
             "__type": "Sandbox.ParticleConeEmitter",
             "__guid": "9766d07d-e808-44d2-b826-6a28a143c2ce",
+            "__enabled": true,
             "Burst": 0,
             "CenterBias": 3,
             "CenterBiasVelocity": 0,
@@ -269,18 +337,29 @@
             "VelocityMultiplier": 6,
             "VelocityRandom": 0
           }
-        ]
+        ],
+        "Children": []
       },
       {
         "__guid": "208c3a46-ab50-4531-b3d2-a13b72ce9a92",
+        "__version": 1,
         "Flags": 0,
         "Name": "Point Light",
         "Position": "0,0,92.87659",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
         "Tags": "light_point,light",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkInterpolation": true,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
         "Components": [
           {
             "__type": "Sandbox.PointLight",
             "__guid": "219719f6-eade-43a9-9d32-920ab4f4a919",
+            "__enabled": true,
             "Attenuation": 2.51,
             "FogMode": "Enabled",
             "FogStrength": 1,
@@ -294,19 +373,14 @@
             "Radius": 200,
             "Shadows": false
           }
-        ]
+        ],
+        "Children": []
       }
     ],
-    "__variables": [],
     "__properties": {
-      "FixedUpdateFrequency": 50,
-      "MaxFixedUpdates": 5,
-      "NetworkFrequency": 30,
       "NetworkInterpolation": true,
-      "PhysicsSubSteps": 1,
-      "ThreadedAnimation": true,
       "TimeScale": 1,
-      "UseFixedUpdate": true,
+      "WantsSystemScene": true,
       "Metadata": {},
       "NavMesh": {
         "Enabled": false,
@@ -320,13 +394,14 @@
         "ExcludedBodies": "",
         "IncludedBodies": ""
       }
-    }
+    },
+    "__variables": []
   },
+  "ResourceVersion": 2,
   "ShowInMenu": false,
   "MenuPath": null,
   "MenuIcon": null,
   "DontBreakAsTemplate": false,
-  "ResourceVersion": 1,
   "__references": [],
-  "__version": 1
+  "__version": 2
 }

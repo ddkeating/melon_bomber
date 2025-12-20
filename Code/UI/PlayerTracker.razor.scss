@@ -1,0 +1,17 @@
+.player-tracker {
+	position: absolute;
+	pointer-events: none;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+}
+
+.chevron {
+	font-size: 32px;
+	color: red;
+}
+
+.player-name {
+	font-size: 14px;
+	color: white;
+}

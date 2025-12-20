@@ -1,19 +1,26 @@
 {
   "RootObject": {
     "__guid": "47500bbc-3340-4e9e-b63a-7800fbb8f1a4",
+    "__version": 1,
     "Flags": 0,
     "Name": "player",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
     "Tags": "player",
     "Enabled": true,
+    "NetworkMode": 2,
+    "NetworkInterpolation": true,
+    "NetworkOrphaned": 0,
+    "NetworkTransmit": true,
+    "OwnerTransfer": 1,
     "Components": [
       {
         "__type": "Sandbox.Citizen.CitizenAnimationHelper",
         "__guid": "b1b6f95b-c81d-4a82-bd1a-264126601fe2",
+        "__enabled": true,
         "BodyWeight": 1,
-        "EyeSource": {
-          "_type": "gameobject",
-          "go": "826d16aa-80e9-45fe-bdf2-2d4e5a3d001b"
-        },
+        "EyeSource": null,
         "EyesWeight": 1,
         "HeadWeight": 1,
         "Height": null,
@@ -39,17 +46,11 @@
       {
         "__type": "PlayerMovement",
         "__guid": "d800a9bc-3fdd-4604-b0af-df34c2f69a3e",
-        "AirControl": 0.1,
+        "__enabled": true,
         "Body": {
           "_type": "gameobject",
           "go": "db8bc5ef-bc54-42f7-bd5f-b32de39d45ca"
         },
-        "GroundControl": 6,
-        "Head": {
-          "_type": "gameobject",
-          "go": "826d16aa-80e9-45fe-bdf2-2d4e5a3d001b"
-        },
-        "MaxForce": 50,
         "OnComponentDestroy": null,
         "OnComponentDisabled": null,
         "OnComponentEnabled": null,
@@ -59,30 +60,10 @@
         "Speed": 140
       },
       {
-        "__type": "Sandbox.CharacterController",
-        "__guid": "12c7fb37-7881-4a67-ac40-fa1066b66b46",
-        "Acceleration": 10,
-        "Bounciness": 0.3,
-        "GroundAngle": 45,
-        "Height": 64,
-        "IgnoreLayers": "",
-        "OnComponentDestroy": null,
-        "OnComponentDisabled": null,
-        "OnComponentEnabled": null,
-        "OnComponentFixedUpdate": null,
-        "OnComponentStart": null,
-        "OnComponentUpdate": null,
-        "Radius": 16,
-        "StepHeight": 18,
-        "UseCollisionRules": false
-      },
-      {
         "__type": "BombManager",
         "__guid": "0c9099b0-926d-4878-9267-71fc61ebe411",
-        "bombExplosion": {
-          "_type": "gameobject",
-          "prefab": "prefabs/bombexplosion.prefab"
-        },
+        "__enabled": true,
+        "bombExplosion": null,
         "bombPrefab": {
           "_type": "gameobject",
           "prefab": "prefabs/bomb.prefab"
@@ -99,9 +80,31 @@
         }
       },
       {
+        "__type": "Sandbox.CharacterController",
+        "__guid": "12c7fb37-7881-4a67-ac40-fa1066b66b46",
+        "__enabled": true,
+        "Acceleration": 10,
+        "Bounciness": 0.3,
+        "GroundAngle": 45,
+        "Height": 64,
+        "IgnoreLayers": "",
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "Radius": 16,
+        "StepHeight": 18,
+        "UseCollisionRules": false
+      },
+      {
         "__type": "Sandbox.BoxCollider",
         "__guid": "f8d7aebf-f717-42e9-8b0f-6dc3997cf999",
+        "__enabled": true,
         "Center": "-0.7845669,-0.6827507,35.97681",
+        "ColliderFlags": 0,
+        "Elasticity": null,
         "Friction": null,
         "IsTrigger": true,
         "OnComponentDestroy": null,
@@ -114,6 +117,7 @@
         "OnObjectTriggerExit": null,
         "OnTriggerEnter": null,
         "OnTriggerExit": null,
+        "RollingResistance": null,
         "Scale": "29.07581,32.14908,71.85332",
         "Static": false,
         "Surface": null,
@@ -123,20 +127,33 @@
     "Children": [
       {
         "__guid": "db8bc5ef-bc54-42f7-bd5f-b32de39d45ca",
+        "__version": 1,
         "Flags": 0,
         "Name": "Body",
+        "Position": "0,0,0",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
         "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkInterpolation": true,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
         "Components": [
           {
             "__type": "Sandbox.SkinnedModelRenderer",
             "__guid": "1184afdd-a851-414d-9e49-fb84c84fccb8",
+            "__enabled": true,
             "AnimationGraph": null,
             "BodyGroups": 341,
             "BoneMergeTarget": null,
             "CreateAttachments": false,
             "CreateBoneObjects": false,
+            "LodOverride": null,
             "MaterialGroup": null,
             "MaterialOverride": null,
+            "Materials": null,
             "Model": "models/citizen/citizen.vmdl",
             "Morphs": {},
             "OnComponentDestroy": null,
@@ -161,31 +178,21 @@
             },
             "RenderType": "On",
             "Sequence": {
-              "Name": null
+              "Name": null,
+              "Looping": true,
+              "Blending": false
             },
             "Tint": "1,1,1,1",
             "UseAnimGraph": true
           }
-        ]
-      },
-      {
-        "__guid": "826d16aa-80e9-45fe-bdf2-2d4e5a3d001b",
-        "Flags": 0,
-        "Name": "Head",
-        "Position": "-14.16888,0,67.019",
-        "Enabled": true
+        ],
+        "Children": []
       }
     ],
-    "__variables": [],
     "__properties": {
-      "FixedUpdateFrequency": 50,
-      "MaxFixedUpdates": 5,
-      "NetworkFrequency": 30,
       "NetworkInterpolation": true,
-      "PhysicsSubSteps": 1,
-      "ThreadedAnimation": true,
       "TimeScale": 1,
-      "UseFixedUpdate": true,
+      "WantsSystemScene": true,
       "Metadata": {},
       "NavMesh": {
         "Enabled": false,
@@ -199,13 +206,14 @@
         "ExcludedBodies": "",
         "IncludedBodies": ""
       }
-    }
+    },
+    "__variables": []
   },
+  "ResourceVersion": 2,
   "ShowInMenu": false,
   "MenuPath": null,
   "MenuIcon": null,
   "DontBreakAsTemplate": false,
-  "ResourceVersion": 1,
   "__references": [],
-  "__version": 1
+  "__version": 2
 }

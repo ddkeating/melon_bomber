@@ -1,203 +1,261 @@
-using System;
-using Sandbox;
+﻿using Sandbox;
 using Sandbox.Citizen;
+using System;
+using static Sandbox.ModelPhysics;
 
 public sealed class PlayerMovement : Component, Component.ITriggerListener
 {
-    [Property] public float GroundControl { get; set; } = 4.0f;
-    [Property] public float Speed { get; set; } = 160.0f;
-    [Property] public float AirControl { get; set; } = 0.1f;
-    [Property] public float MaxForce { get; set; } = 50.0f;
+	// === CONFIG ===
+	[Property] public float Speed { get; set; } = 200f;
+	[Property] public GameObject Body { get; set; }
 
-    // Object References
-    [Property] public GameObject Head { get; set; }
-    [Property] public GameObject Body { get; set; }
+	// === STATE ===
+	[Sync] public bool IsDead { get; set; }
 
-    // Member Variables
-    public bool isDead = false;
-    private float ragdollTimer;
-    public Vector3 WishVelocity = Vector3.Zero;
-    private CharacterController characterController;
-    private CitizenAnimationHelper animationHelper;
-    protected override void OnAwake()
-    {
-        if (Network.IsProxy) return;
-        characterController = Components.Get<CharacterController>();
-        animationHelper = Components.Get<CitizenAnimationHelper>();
-    }
+	private Vector2 currentGridPos;
+	private Vector2 targetGridPos;
+	private bool isMoving;
+	private bool canMove = false;
 
-    protected override void OnUpdate()
-    {
-        {
-            if ( isDead )
-            {
-                ragdollTimer += Time.Delta;
-                if ( ragdollTimer > 2.0f && GameObject.GetComponent<ModelPhysics>() == null )
-                {
-                    Death();
-                }
-                return;
-            }
-            RotateBody();
-        }
-        if ( isDead ) return;
-        UpdateAnimation();
-    }
+	private float ragdollTimer;
+	private Vector2 deathGridPos;
+	private const float RagdollDuration = 2.5f;
+	private const float PlayerZ = 0f;
 
-    protected override void OnFixedUpdate()
-    {
-        BuildWishVelocity();
-        Move();
-    }
-
-    void BuildWishVelocity()
-{
-    WishVelocity = Vector3.Zero;
-
-    var rot = GameObject.LocalRotation;
-
-    // Determine direction based on input.
-    if ( !isDead )
-    {
-        // Only move forward or backward (no simultaneous forward and backward).
-        if ( Input.Down( "Forward" ) )
-        {
-            WishVelocity = rot.Forward;
-            Head.LocalRotation = Rotation.FromYaw( 0 );
-        }
-        else if ( Input.Down( "Backward" ) )
-        {
-            WishVelocity = rot.Backward;
-            Head.LocalRotation = Rotation.FromYaw( 180 );
-        }
-
-        // Only move left or right (no simultaneous left and right).
-        if ( Input.Down( "Left" ) )
-        {
-            WishVelocity = rot.Left;
-            Head.LocalRotation = Rotation.FromYaw( 90 );
-        }
-        else if ( Input.Down( "Right" ) )
-        {
-            WishVelocity = rot.Right;
-            Head.LocalRotation = Rotation.FromYaw( 270 );
-        }
-    }
-    else
-    {
-        var ragdoll = GameObject.GetComponent<ModelPhysics>();
-        if ( ragdoll.IsValid() )
-        {
-            ragdoll.WorldPosition = GameObject.WorldPosition;
-            ragdoll.WorldRotation = GameObject.WorldRotation;
-        }
-    }
-
-    // Zero out the vertical component (keep it on the horizontal plane).
-    WishVelocity = WishVelocity.WithZ( 0 );
-
-    // If the velocity is not zero, normalize it.
-    if ( !WishVelocity.IsNearZeroLength ) WishVelocity = WishVelocity.Normal;
-
-    // Apply speed.
-    WishVelocity *= Speed;
-}
+	private ModelPhysics ragdoll;
 
 
+	private MapLoader mapLoader;
+	private CitizenAnimationHelper anim;
+	private CharacterController characterController;
 
-    void Move()
-    {
-        var gravity = Scene.PhysicsWorld.Gravity;
+	// === SETUP ===
+	protected override void OnStart()
+	{
+		mapLoader = Scene.GetAllComponents<MapLoader>().FirstOrDefault();
+		anim = Components.Get<CitizenAnimationHelper>();
+		characterController = Components.Get<CharacterController>();
+	}
 
-        if ( characterController.IsOnGround )
-        {
-            // Apply Friction/Acceleration
-            characterController.Velocity = characterController.Velocity.WithZ( 0 );
-            characterController.Accelerate( WishVelocity );
-            characterController.ApplyFriction( GroundControl );
-        }
-        else
-        {
-            // Apply Air Control / Gravity
-            characterController.Velocity += gravity * Time.Delta * 0.5f;
-            characterController.Accelerate( WishVelocity.ClampLength( MaxForce ) );
-            characterController.ApplyFriction( AirControl );
-        }
+	// === INPUT ===
+	protected override void OnUpdate()
+	{
+		if ( mapLoader == null || !mapLoader.IsMapReady || IsDead ) return;
 
-        // Move the character controller
-        characterController.Move();
+		if ( !canMove )
+		{
+			InitializeGridPosition();
+			canMove = true;
+		}
 
-        if ( !characterController.IsOnGround )
-        {
-            characterController.Velocity += gravity * Time.Delta * 0.5f;
-        }
-        else
-        {
-            characterController.Velocity = characterController.Velocity.WithZ( 0 );
-        }
+		HandleInput();
+		UpdateAnimation();
+		RotateBody();
+	}
 
-    }
+	// === MOVEMENT ===
+	protected override void OnFixedUpdate()
+	{
+		if ( IsDead )
+		{
+			UpdateRagdoll();
+			return;
+		}
 
-    void RotateBody()
-    {
-        if ( Body is null ) return;
+		if ( !isMoving ) return;
+		MoveTowardsTarget();
+	}
 
-        var targetAngle = new Angles( 0, Head.WorldRotation.Yaw(), 0 ).ToRotation();
-        Body.WorldRotation = Rotation.FromYaw( targetAngle.Yaw() );
-    }
 
-    void UpdateAnimation()
-    {
-        if ( animationHelper is null ) return;
+	private void HandleInput()
+	{
+		if ( isMoving ) return;
 
-        animationHelper.WithWishVelocity( WishVelocity );
-        animationHelper.WithVelocity( characterController.Velocity );
-        animationHelper.AimAngle = Head.WorldRotation;
-        animationHelper.IsGrounded = characterController.IsOnGround;
-        animationHelper.WithLook( Head.WorldRotation.Forward, 1f, 0.75f, 0.5f );
-        animationHelper.MoveStyle = CitizenAnimationHelper.MoveStyles.Run;
-    }
+		Vector2 dir = Vector2.Zero;
 
-    public void Death()
-    {
-        characterController.Punch( Vector3.Up * 1000 );
-        var ragdoll = GameObject.AddComponent<ModelPhysics>();
-        var modelRender = GameObject.GetComponentInChildren<SkinnedModelRenderer>();
-        if ( modelRender.IsValid() )
-        {
-            Log.Info( "called" );
-            ragdoll.Renderer = modelRender;
-            ragdoll.Model = modelRender.Model;
-        }
-    }
+		if ( Input.Down( "Forward" ) ) dir = new Vector2( 1, 0 ); // W -> up
+		if ( Input.Down( "Backward" ) ) dir = new Vector2( -1, 0 ); // S -> down
+		if ( Input.Down( "Left" ) ) dir = new Vector2( 0, -1 );    // A -> left
+		if ( Input.Down( "Right" ) ) dir = new Vector2( 0, 1 );    // D -> right
 
-    // Collision Stuff
-    public void OnTriggerEnter( Collider other )
-    {
-        if ( isDead ) return;
-        if ( other.GameObject.GetComponent<PowerUp>() != null )
-        {
-            other.GameObject.GetComponent<PowerUp>().HandlePowerUp();
-        }
-        if ( other.GameObject.Tags.Has( "Explosion" ) )
-        {
-            isDead = true;
-            characterController.Punch( Vector3.Up * 3000 );
-            Body.GetComponent<SkinnedModelRenderer>().PlaybackRate = 0f;
-        }
-    }
+		if ( dir == Vector2.Zero ) return;
 
-    public void OnTriggerExit( Collider other )
-    {
-        if ( other.GameObject.Tags.Has( "bomb" ) )
-        {
-            other.GameObject.GetComponent<BoxCollider>().IsTrigger = false;
-        }
-    }
+		Vector2 nextCell = currentGridPos + dir;
 
-    [Button( "Add force" )]
-    public void AddForce()
-    {
-        characterController.Punch( Vector3.Up * 1000 );
-    }
+		if ( !CanMoveTo( nextCell ) ) return;
+
+		targetGridPos = nextCell;
+		Log.Info( $"Target Grid Pos: {mapLoader.GetWorldPosition(targetGridPos)}" );
+		isMoving = true;
+	}
+
+
+	private bool CanMoveTo( Vector2 gridPos )
+	{
+		if ( !mapLoader.IsValidGridPosition(gridPos)) return false;
+		var value = mapLoader.GetGridValue( gridPos );
+		return value == MapLoader.GridCellType.Empty || value == MapLoader.GridCellType.PowerUp || value == MapLoader.GridCellType.PlayerSpawn;
+	}
+
+	private void MoveTowardsTarget()
+	{
+		if ( IsDead ) return;
+		Vector3 targetWorldPos = mapLoader.GetWorldPosition( targetGridPos ).WithZ(0);
+
+		Vector3 delta = targetWorldPos - GameObject.WorldPosition;
+		float step = Speed * Time.Delta;
+
+		if ( delta.Length <= step )
+		{
+			GameObject.WorldPosition = targetWorldPos;
+			currentGridPos = targetGridPos;
+			isMoving = false;
+			return;
+		}
+
+		GameObject.WorldPosition += delta.Normal * step;
+	}
+
+
+	// === HELPERS ===
+	private void SnapToGrid()
+	{
+		if ( IsDead ) return;
+		Vector3 gridPos = mapLoader.GetWorldPosition( currentGridPos ).WithZ(0);
+
+
+		GameObject.WorldPosition = gridPos;
+	}
+
+
+	private void InitializeGridPosition()
+	{
+		currentGridPos = mapLoader.GetGridPosition( GameObject.WorldPosition );
+		targetGridPos = currentGridPos;
+		SnapToGrid();
+	}
+
+
+	private void RotateBody()
+	{
+		if ( Body == null ) return;
+
+		Vector2 dir = targetGridPos - currentGridPos;
+		if ( dir == Vector2.Zero ) return;
+
+		float yaw = dir switch
+		{
+			{ x: 1, y: 0 } => 0,    // up
+			{ x: -1, y: 0 } => 180,   // down
+			{ x: 0, y: 1 } => 270,  // right
+			{ x: 0, y: -1 } => 90,    // left
+			_ => 0
+		};
+
+
+		Body.WorldRotation = Rotation.FromYaw( yaw );
+	}
+
+	private void UpdateAnimation()
+	{
+		if ( anim == null ) return;
+
+		anim.WithVelocity( isMoving ? Body.WorldRotation.Forward * Speed : Vector3.Zero );
+		anim.WithWishVelocity( isMoving ? Vector3.Forward * Speed : Vector3.Zero );
+		anim.IsGrounded = true;
+		anim.MoveStyle = CitizenAnimationHelper.MoveStyles.Run;
+	}
+
+	public void OnTriggerEnter( Collider other ) 
+	{ 
+		if ( IsDead ) return; 
+
+		HandlePowerUp( other ); 
+		HandleExplosion( other ); 
+	}
+
+	private void HandlePowerUp( Collider other ) 
+	{ 
+		var powerUp = other.GameObject.GetComponent<PowerUp>(); 
+
+		if ( powerUp != null ) 
+		{ 
+			powerUp.HandlePowerUp(); 
+		} 
+	}
+	private void HandleExplosion( Collider other ) 
+	{ 
+		if ( other.GameObject.Tags.Has( "Explosion" ) ) 
+		{ 
+			Kill();
+		} 
+	}
+
+
+	// === DEATH ===
+	public void Kill()
+	{
+		IsDead = true;
+
+		deathGridPos = currentGridPos;
+
+		anim?.Enabled = false;
+
+		// Spawn ragdoll
+		ragdoll = GameObject.AddComponent<ModelPhysics>();
+
+		var renderer = GameObject.GetComponentInChildren<SkinnedModelRenderer>();
+		if ( renderer != null )
+		{
+			ragdoll.Model = renderer.Model;
+			ragdoll.Renderer = renderer;
+		}
+		Log.Info( $"Ragdoll model: {ragdoll.Bodies}" );
+
+		// Launch upward: apply velocity to all ragdoll bodies
+		foreach ( var body in ragdoll.Bodies )
+		{
+			body.Component.Velocity += Vector3.Up * 700f;
+		}
+	}
+
+	private void UpdateRagdoll()
+	{
+		ragdollTimer += Time.Delta;
+
+		if ( ragdoll != null )
+		{
+			// Keep ragdoll roughly above death spot (optional polish)
+			ragdoll.WorldPosition =
+				ragdoll.WorldPosition.WithX(
+					mapLoader.GetWorldPosition( deathGridPos ).x
+				).WithY(
+					mapLoader.GetWorldPosition( deathGridPos ).y
+				);
+		}
+	}
+
+	[Button("Revive")]
+	private void Revive()
+	{
+		if ( !IsDead ) return;
+		IsDead = false;
+		ragdollTimer = 0f;
+		// Remove ragdoll
+		if ( ragdoll != null )
+		{
+			GameObject.GetComponent<ModelPhysics>().Destroy();
+			ragdoll = null;
+		}
+		// Reset position
+		InitializeGridPosition();
+		// Re-enable animation
+		anim?.Enabled = true;
+	}
+
+
+
+
+
+
 }

@@ -1,0 +1,118 @@
+StartGame {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 50px;
+    background: linear-gradient(180deg, #e77517a2 0%, #000000d3 100%);
+    font-weight: bold;
+    font-family: poppins;
+    cursor: default;
+    pointer-events: all;
+
+    .background {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    .upper-container {
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+        width: 60%;
+        align-items: flex-start;
+    }
+
+    .game-info {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .game-title {
+        font-size: 10rem;
+        color: rgb(247, 90, 0);
+        line-height: 100px;
+    }
+
+    .game-description {
+        color: white;
+        font-size: 3rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .players {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        gap: 20px;
+    }
+
+    .player-container {
+        display: flex;
+        text-align: right;
+        justify-content: flex-end;
+        align-items: flex-start;
+        gap: 20px;
+    }
+
+        .player-container .player-name {
+            color: white;
+            font-size: 4rem;
+            text-shadow: 2px 2px 2px #000000;
+        }
+
+    .player-avatar {
+        position: relative;
+        width: 16rem;
+        height: 16rem;
+        border-radius: 50%;
+        border: 0.5rem solid white;
+        background-position: center;
+        background-size: contain;
+        background-repeat: no-repeat;
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        font-size: 8rem;
+        color: white;
+        background-color: rgb(101, 101, 101, 0.58);
+    }
+
+    .start-button {
+        position: relative;
+        height: 150px;
+        align-items: center;
+        background-color: white;
+        padding: 10px 120px;
+        border: none;
+        border-radius: 20px;
+        pointer-events: all;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+        .start-button:hover {
+            background-color: rgb(243, 105, 26);
+        }
+
+        .start-button h1 {
+            opacity: 1;
+            font-size: 3.5rem;
+            text-transform: uppercase;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .start-button:hover h1 {
+            color: white;
+        }
+}

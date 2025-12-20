@@ -42,7 +42,7 @@ public sealed class PowerUp : Component
         }
 
         // Smoothly transition to the target pivot value
-        _spriteRenderer.Pivot = Vector2.Lerp( _spriteRenderer.Pivot, targetPivot, smoothSpeed * Time.Delta );
+        //_spriteRenderer.Pivot = Vector2.Lerp( _spriteRenderer.Pivot, targetPivot, smoothSpeed * Time.Delta );
     }
 
     private void SpriteAnimation()
@@ -67,7 +67,7 @@ public sealed class PowerUp : Component
             IncreaseSpeed();
         }
         var powerUpOnGrid = _mapLoader.GetGridPosition( GameObject.WorldPosition );
-        _mapLoader.SetGridValue( powerUpOnGrid, "Empty Space" );
+        _mapLoader.SetGridValue( powerUpOnGrid, MapLoader.GridCellType.Empty );
         _mapLoader._powerUpCount--;
     }
 

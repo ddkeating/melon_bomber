@@ -1,15 +1,25 @@
 {
   "RootObject": {
     "__guid": "9f303384-4566-4786-ac85-0cd16348fd8f",
+    "__version": 1,
     "Flags": 0,
     "Name": "bomb-powerup",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
     "Tags": "breakable,powerup",
     "Enabled": true,
+    "NetworkMode": 2,
+    "NetworkInterpolation": true,
+    "NetworkOrphaned": 0,
+    "OwnerTransfer": 1,
     "Components": [
       {
         "__type": "Sandbox.BoxCollider",
         "__guid": "f6482aac-fb6f-4ac7-aaef-e2a727e94b0b",
+        "__enabled": true,
         "Center": "0,0,0",
+        "Elasticity": null,
         "Friction": null,
         "IsTrigger": true,
         "OnComponentDestroy": null,
@@ -22,6 +32,7 @@
         "OnObjectTriggerExit": null,
         "OnTriggerEnter": null,
         "OnTriggerExit": null,
+        "RollingResistance": null,
         "Scale": "50,50,50",
         "Static": false,
         "Surface": null,
@@ -30,13 +41,16 @@
       {
         "__type": "Sandbox.SpriteRenderer",
         "__guid": "87330eed-c413-4859-9e3d-439e95d190fc",
+        "__enabled": true,
+        "__version": 2,
         "Additive": false,
-        "CastShadows": false,
+        "Billboard": "Always",
         "Color": "1,1,1,1",
         "DepthFeather": 0,
         "FlipHorizontal": false,
         "FlipVertical": false,
         "FogStrength": 0,
+        "IsSorted": false,
         "Lighting": true,
         "OnComponentDestroy": null,
         "OnComponentDisabled": null,
@@ -45,19 +59,43 @@
         "OnComponentStart": null,
         "OnComponentUpdate": null,
         "Opaque": false,
-        "Pivot": "0.5,0.5",
+        "PlaybackSpeed": 1,
         "RenderOptions": {
           "GameLayer": true,
           "OverlayLayer": false,
           "BloomLayer": false,
           "AfterUILayer": false
         },
+        "Shadows": false,
         "Size": "50,50",
-        "Texture": "textures/power ups/bomb.vtex"
+        "Sprite": {
+          "$compiler": "embed",
+          "$source": null,
+          "data": {
+            "Animations": [
+              {
+                "Name": "Default",
+                "FrameRate": 15,
+                "Origin": "0.5,0.5",
+                "LoopMode": "Loop",
+                "Frames": [
+                  {
+                    "Texture": "textures/power ups/bomb.vtex"
+                  }
+                ]
+              }
+            ],
+            "__references": null
+          },
+          "compiled": null
+        },
+        "StartingAnimationName": "Default",
+        "TextureFilter": "Bilinear"
       },
       {
         "__type": "PowerUp",
         "__guid": "2b670750-792f-4e92-aa49-385f7292825e",
+        "__enabled": true,
         "OnComponentDestroy": null,
         "OnComponentDisabled": null,
         "OnComponentEnabled": null,
@@ -69,20 +107,27 @@
     "Children": [
       {
         "__guid": "30fc290f-5984-4de9-aa45-abe22c7a425d",
+        "__version": 1,
         "Flags": 0,
         "Name": "Spot Light",
         "Position": "0,0,70.26321",
         "Rotation": "0,0.7071068,0,0.7071068",
+        "Scale": "1,1,1",
         "Tags": "light,light_spot",
         "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkInterpolation": true,
+        "NetworkOrphaned": 0,
+        "OwnerTransfer": 1,
         "Components": [
           {
             "__type": "Sandbox.SpotLight",
             "__guid": "2eb2df52-8c83-4909-bb2c-c28ea6976326",
+            "__enabled": true,
             "Attenuation": 1.08,
             "ConeInner": 90,
             "ConeOuter": 36.05,
-            "Cookie": "materials/particle/particle_glow_01.vtex",
+            "Cookie": "textures/particles/particle_glow_01.vtex",
             "FogMode": "Enabled",
             "FogStrength": 1,
             "LightColor": "0.89767,0.49567,0.44257,1",
@@ -95,19 +140,14 @@
             "Radius": 200,
             "Shadows": true
           }
-        ]
+        ],
+        "Children": []
       }
     ],
-    "__variables": [],
     "__properties": {
-      "FixedUpdateFrequency": 50,
-      "MaxFixedUpdates": 5,
-      "NetworkFrequency": 30,
       "NetworkInterpolation": true,
-      "PhysicsSubSteps": 1,
-      "ThreadedAnimation": true,
       "TimeScale": 1,
-      "UseFixedUpdate": true,
+      "WantsSystemScene": true,
       "Metadata": {},
       "NavMesh": {
         "Enabled": false,
@@ -121,13 +161,14 @@
         "ExcludedBodies": "",
         "IncludedBodies": ""
       }
-    }
+    },
+    "__variables": []
   },
+  "ResourceVersion": 2,
   "ShowInMenu": false,
   "MenuPath": null,
   "MenuIcon": null,
   "DontBreakAsTemplate": false,
-  "ResourceVersion": 1,
   "__references": [],
-  "__version": 1
+  "__version": 2
 }

@@ -1,0 +1,108 @@
+﻿@using Sandbox;
+@using Sandbox.UI;
+@using Sandbox.Services.Players;
+@inherits PanelComponent
+@namespace Sandbox
+
+<root style="@(BomberManager.StartGame ? "opacity: 1" : "opacity: 0")">
+
+
+	<div class="HUD-container">
+        <div class="left-container">
+            @foreach (var profile in profiles)
+            {
+                <div class="player-container">
+                    <div class="player-avatar" style="background-image: url('@profile.Value.Avatar');"></div>
+                    <h1 class="player-name">@profile.Value.Name</h1>
+                </div>
+            }
+        </div>
+        @if (bm != null && BomberManager.StartGame)
+        {
+        <div class="right-container">
+            <div class="power-up">
+                    <h1 class="power-up-value">@((bm?.maxBombCount) ?? 0)</h1>
+                <div class="power-up-icon" style="background-image: url('@BombPowerUpSprite');"></div>
+            </div>
+            <div class="power-up">
+                <h1 class="power-up-value">@((bm?.radius) ?? 0)</h1>
+                <div class="power-up-icon" style="background-image: url('@RadiusPowerUpSprite');"></div>
+            </div>
+            <div class="power-up">
+                    <h1 class="power-up-value">@((bm?.moveSpeedUpgrades) ?? 0)</h1>
+                <div class="power-up-icon" style="background-image: url('@SpeedPowerUpSprite');"></div>
+            </div>
+        </div>
+        }
+    </div>
+</root>
+
+@code
+{
+    private BombManager bm;
+    public readonly Dictionary<long, Profile> profiles = new();
+    [Property(Title = "Radius Power Up Sprite")]
+    public string RadiusPowerUpSprite { get; set; }
+    [Property(Title = "Bomb Power Up Sprite")]
+    public string BombPowerUpSprite { get; set; }
+    [Property(Title = "Speed Power Up Sprite")]
+    public string SpeedPowerUpSprite { get; set; }
+
+
+    protected override void OnStart()
+    {
+        RefreshProfiles();
+        bm = Scene.GetAllComponents<BombManager>().FirstOrDefault();
+    }
+
+    protected override void OnUpdate()
+    {
+        if (bm == null)
+        {
+            bm = Scene.GetAllComponents<BombManager>().FirstOrDefault();
+        }
+
+        RefreshProfiles();
+
+    }
+
+
+    private async void RefreshProfiles()
+    {
+        // Add new players
+        foreach (var conn in Connection.All)
+        {
+            if (!profiles.ContainsKey(conn.SteamId))
+            {
+                profiles[conn.SteamId] = await Profile.Get(conn.SteamId);
+                StateHasChanged();
+            }
+        }
+
+        // Remove players who left
+        var disconnected = profiles.Keys
+            .Where(id => !Connection.All.Any(c => c.SteamId == id))
+            .ToList();
+
+        foreach (var id in disconnected)
+        {
+            profiles.Remove(id);
+            StateHasChanged();
+        }
+    }
+
+	/// <summary>
+	/// the hash determines if the system should be rebuilt. If it changes, it will be rebuilt
+	/// </summary>
+	
+    protected override int BuildHash()
+    {
+        return System.HashCode.Combine(
+            BomberManager.StartGame,
+            bm?.radius ?? 0,
+            bm?.moveSpeedUpgrades ?? 0,
+            bm?.maxBombCount ?? 0
+        );
+    }
+
+}

@@ -1,0 +1,76 @@
+@using Sandbox;
+@using Sandbox.UI;
+@using Sandbox.Services.Players;
+@inherits PanelComponent
+@namespace Sandbox
+
+<root>
+    <div class="background">
+        <div class="upper-container">
+            <div class="game-info">
+                <label class="game-title">Terry Bomber</label>
+                <label class="game-description">Time to go boom</label>
+            </div>
+            <button class="start-button" @onclick=@(() => BomberManager.StartGameButton())>
+                <h1>Start Game</h1>
+            </button>
+        </div>
+        <div class="lower-container">
+            <div class="players">
+                <!--Player Icons-->
+                @for (int i = 0; i < 4; i++)
+                {
+                    @if (hudComponent != null && i < hudComponent.profiles.Count)
+                    {
+                        var profile = hudComponent.profiles.Values.ElementAt(i);
+
+                        <div class="player-container">
+                            <h1 class="player-name">@profile.Name</h1>
+                            <div class="player-avatar" style="background-image: url('@profile.Avatar');"></div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="player-container">
+                            <h1 class="player-name">Waiting...</h1>
+                            <div class="player-avatar"><h1>?</h1></div>
+                        </div>
+                    }
+                }
+
+
+            </div>
+			
+        </div>
+    </div>
+</root>
+
+@code
+{
+    private HUD hudComponent;
+    protected override void OnStart()
+    {
+        base.OnStart();
+        hudComponent = Scene.GetAllComponents<HUD>().FirstOrDefault();
+    }
+
+    protected override void OnUpdate()
+    {
+        if (hudComponent == null)
+        {
+            hudComponent = Scene.GetAllComponents<HUD>().FirstOrDefault();
+            return;
+        }
+
+        if (BomberManager.StartGame)
+        {
+            Destroy();
+        }
+    }
+
+
+
+    /// <summary>
+    /// the hash determines if the system should be rebuilt. If it changes, it will be rebuilt
+    /// </summary>
+}

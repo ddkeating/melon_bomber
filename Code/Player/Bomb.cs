@@ -1,4 +1,4 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Threading;
 using Sandbox;
 
@@ -6,10 +6,7 @@ public sealed class Bomb : Component
 {
     private GameObject _explosionParticle;
     private GameObject _shockwaveParticle;
-    private GameObject _fuseFlareParticle;
-    private GameObject _fuseParticle;
     private GameObject _explosion;
-    private GameObject _boomSound;
     private MapLoader _mapLoader;
     private BombManager _bombManager;
     private CameraShake cameraShake;
@@ -17,7 +14,9 @@ public sealed class Bomb : Component
     float _bombDetonationTime = 5f;
     int radius = 1;
 
-    protected override void OnStart()
+	private Vector2 bombGridPos;
+
+	protected override void OnStart()
     {
         _explosionParticle = GameObject.Children[0];
         _explosionParticle.Enabled = false;
@@ -32,20 +31,22 @@ public sealed class Bomb : Component
         _boxCollider.Enabled = true;
         _boxCollider.IsTrigger = true;
         
-        var mapLoaderContainer = Scene.GetAllComponents<MapLoader>();
-        foreach ( var mapLoader in mapLoaderContainer )
-        {
-            _mapLoader = mapLoader;
-        }
-        var bombManagerContainer = Scene.GetAllComponents<BombManager>();
-        foreach ( var bombManager in bombManagerContainer )
-        {
-            _bombManager = bombManager;
-        }
-        cameraShake = Scene.Camera.GetComponent<CameraShake>();
+        _mapLoader = Scene.GetAllComponents<MapLoader>().FirstOrDefault();
+		_bombManager = Scene.GetAllComponents<BombManager>().FirstOrDefault();
+		cameraShake = Scene.Camera.GetComponent<CameraShake>();
 
-    }
-    protected override void OnUpdate()
+		bombGridPos = _mapLoader.GetGridPosition( GameObject.WorldPosition );
+		_mapLoader.SetGridValue( bombGridPos, MapLoader.GridCellType.Bomb );
+
+		if ( _mapLoader == null || !_mapLoader.IsMapReady )
+		{
+			GameObject.Destroy();
+			return;
+		}
+
+
+	}
+	protected override void OnUpdate()
     {
         HandleTint();
         _bombDetonationTime -= Time.Delta;
@@ -57,7 +58,9 @@ public sealed class Bomb : Component
 
     private void Explode()
     {
-        var smokeCloud = _explosionParticle.Clone( GameObject.WorldPosition + Vector3.Up * 50, GameObject.WorldRotation );
+		_mapLoader.SetGridValue( bombGridPos, MapLoader.GridCellType.Empty );
+
+		var smokeCloud = _explosionParticle.Clone( GameObject.WorldPosition + Vector3.Up * 50, GameObject.WorldRotation );
         smokeCloud.NetworkSpawn();
         smokeCloud.Enabled = true;
         var shockwave = _shockwaveParticle.Clone( GameObject.WorldPosition + Vector3.Up * 20, GameObject.WorldRotation );
@@ -86,28 +89,34 @@ public sealed class Bomb : Component
             }
         }
 
-        void ProcessDirection( Vector2 direction )
-        {
-            var wallList = new List<Vector2>();
-            for ( int i = 1; i <= radius; i++ )
-            {
-                var position = bombOnGrid + direction * i;
-                if ( IsIndestructibleWall( position ) || IsWall( position ) )
-                {
-                    wallList.Add( position );
-                }
-                if ( !wallList.Any( wall => direction.x != 0 ? position.x > wall.x && position.y == wall.y : position.y > wall.y && position.x == wall.x ) )
-                {
-                    TryCloneExplosion( position );
-                    if ( IsIndestructibleWall( position ) || IsWall( position ) )
-                    {
-                        break;
-                    }
-                }
-            }
-        }
+		void ProcessDirection( Vector2 direction )
+		{
+			for ( int i = 1; i <= radius; i++ )
+			{
+				var position = bombOnGrid + direction * i;
 
-        ProcessDirection( new Vector2( 0, 1 ) ); // Right
+				if ( !IsValidGridPosition( position, gridSize ) )
+					break;
+
+				// ❌ Stop immediately on indestructible walls (no explosion)
+				if ( IsIndestructibleWall( position ) )
+					break;
+
+				// 💥 Always explode on valid non-indestructible tiles
+				CloneExplosion( _mapLoader.GetWorldPosition( position ) );
+
+				// 🧱 Destroy breakable walls and stop
+				if ( IsWall( position ) )
+				{
+					_mapLoader.DestroyGameObjectAt( position );
+					break;
+				}
+			}
+		}
+
+
+
+		ProcessDirection( new Vector2( 0, 1 ) ); // Right
         ProcessDirection( new Vector2( 0, -1 ) ); // Left
         ProcessDirection( new Vector2( 1, 0 ) ); // Up
         ProcessDirection( new Vector2( -1, 0 ) ); // Down
@@ -125,7 +134,7 @@ public sealed class Bomb : Component
             return false;
         }
 
-        return _mapLoader.GetGridValue( gridPosition ) == "Indestructable Wall";
+        return _mapLoader.GetGridValue( gridPosition ) == MapLoader.GridCellType.IndestructibleWall;
     }
 
     private bool IsWall( Vector2 gridPosition )
@@ -134,12 +143,13 @@ public sealed class Bomb : Component
         {
             return false;
         }
-        return _mapLoader.GetGridValue( gridPosition ) == "Wall";
+        return _mapLoader.GetGridValue( gridPosition ) == MapLoader.GridCellType.Wall;
     }
 
     private void CloneExplosion( Vector2 position )
     {
         var explosion = _explosion.Clone( position: new Vector3( position.x, position.y, 25 ), GameObject.WorldRotation );
+        explosion.NetworkSpawn();
         explosion.Enabled = true;
     }
 

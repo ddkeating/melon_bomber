@@ -1,0 +1,33 @@
+﻿@using Sandbox
+@using Sandbox.UI
+@inherits PanelComponent
+
+<root class="player-tracker" style="
+    left:@($"{ScreenPos.x}px");
+    top:@($"{ScreenPos.y}px");
+    transform: rotate(@($"{Rotation}deg"));
+">
+    <div class="chevron">▼</div>
+    <label class="player-name">@PlayerName</label>
+</root>
+
+@code
+{
+    public GameObject Target;
+    public string PlayerName;
+
+    private Vector2 ScreenPos;
+    private float Rotation;
+
+    protected override void OnUpdate()
+    {
+        if (Target == null || Scene.Camera == null)
+        {
+            Destroy();
+            return;
+        }
+
+    }
+
+    
+}

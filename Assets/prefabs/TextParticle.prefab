@@ -1,15 +1,25 @@
 {
   "RootObject": {
     "__guid": "5a42670d-4147-46f7-bac9-cfcf7b0e1e44",
+    "__version": 1,
     "Flags": 0,
     "Name": "textparticle",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
     "Tags": "particles",
     "Enabled": true,
+    "NetworkMode": 2,
+    "NetworkInterpolation": true,
+    "NetworkOrphaned": 0,
+    "NetworkTransmit": true,
+    "OwnerTransfer": 1,
     "Components": [
       {
         "__type": "Sandbox.ParticleEffect",
         "__guid": "58a59889-3b07-4614-b943-ccf2f98a6c25",
-        "__version": 1,
+        "__enabled": true,
+        "__version": 3,
         "Alpha": 5,
         "ApplyAlpha": true,
         "ApplyColor": true,
@@ -20,9 +30,21 @@
         "Bumpiness": 0,
         "Collision": false,
         "CollisionIgnore": null,
+        "CollisionPrefab": null,
+        "CollisionPrefabAlign": false,
+        "CollisionPrefabChance": 1,
+        "CollisionPrefabRotation": 0,
         "CollisionRadius": 1,
+        "ConstantMovement": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        },
         "Damping": 0,
         "DieOnCollisionChance": 0,
+        "FollowerPrefab": null,
+        "FollowerPrefabChance": 1,
+        "FollowerPrefabKill": true,
         "Force": false,
         "ForceDirection": "0,0,0",
         "ForceScale": 1,
@@ -67,7 +89,13 @@
           "ConstantA": "1,1,1,1",
           "ConstantB": "1,1,1,1"
         },
+        "InitialVelocity": {
+          "X": 0,
+          "Y": 0,
+          "Z": 0
+        },
         "Lifetime": 1.5,
+        "LocalSpace": 0,
         "MaxParticles": 1,
         "OnComponentDestroy": null,
         "OnComponentDisabled": null,
@@ -84,15 +112,19 @@
         },
         "OrbitalPull": 0,
         "PerParticleTimeScale": 1,
-        "Pitch": 0,
+        "Pitch": 9,
         "PreWarm": 0,
         "PushStrength": 0,
-        "Roll": -10,
+        "Roll": {
+          "Type": "Range",
+          "Evaluation": "Seed",
+          "Constants": "-5,5,0,0"
+        },
         "Scale": {
           "Type": "Curve",
           "Evaluation": "Life",
           "CurveA": {
-            "rangey": "0,4",
+            "rangey": "0,106.8936",
             "frames": [
               {
                 "x": 0,
@@ -103,21 +135,21 @@
               },
               {
                 "x": 0.07668712,
-                "y": 0.8351064,
+                "y": 1,
                 "in": 0,
                 "out": 0,
                 "mode": "Mirrored"
               },
               {
-                "x": 0.892638,
-                "y": 0.79521275,
-                "in": 0.12765948,
-                "out": -0.12765948,
+                "x": 0.87232554,
+                "y": 0.8956829,
+                "in": 0.12922373,
+                "out": -0.12922373,
                 "mode": "Mirrored"
               },
               {
                 "x": 1,
-                "y": 0.78723407,
+                "y": 0.074522294,
                 "in": 0,
                 "out": 0,
                 "mode": "Mirrored"
@@ -132,24 +164,25 @@
               "out": 0,
               "mode": "Mirrored"
             }
-          ],
-          "Constants": "1,0,0,0"
+          ]
         },
         "SequenceId": 0,
         "SequenceSpeed": 1,
         "SequenceTime": 1,
         "SheetSequence": false,
-        "Space": "World",
         "StartDelay": 0,
         "StartVelocity": 1,
         "Stretch": 0,
         "TimeScale": 1,
+        "Timing": "GameTime",
         "Tint": "2,2,2,1",
-        "Yaw": 9
+        "UsePrefabFeature": false,
+        "Yaw": -10
       },
       {
         "__type": "Sandbox.ParticleTextRenderer",
         "__guid": "dae8ce7d-d233-4abf-bc37-961e35483c24",
+        "__enabled": true,
         "Additive": false,
         "Alignment": "LookAtCamera",
         "BlurAmount": 0.5,
@@ -159,6 +192,7 @@
         "FaceVelocity": false,
         "FogStrength": 1,
         "LeadingTrail": true,
+        "Lighting": false,
         "MotionBlur": false,
         "OnComponentDestroy": null,
         "OnComponentDisabled": null,
@@ -167,6 +201,13 @@
         "OnComponentStart": null,
         "OnComponentUpdate": null,
         "Opaque": false,
+        "Pivot": "0.5,0.5",
+        "RenderOptions": {
+          "GameLayer": true,
+          "OverlayLayer": true,
+          "BloomLayer": false,
+          "AfterUILayer": false
+        },
         "RotationOffset": 0,
         "Scale": 1,
         "Shadows": false,
@@ -175,12 +216,13 @@
           "Text": "Text",
           "TextColor": "1,1,1,1",
           "FontName": "Poppins",
-          "FontSize": 64,
+          "FontSize": 184.84615,
           "FontWeight": 400,
           "FontItalic": false,
           "LineHeight": 1,
           "LetterSpacing": 0,
           "WordSpacing": 0,
+          "FilterMode": "Point",
           "Outline": {
             "Enabled": true,
             "Size": 4,
@@ -203,11 +245,13 @@
             "Color": "0,0,0,1",
             "Offset": "4,4"
           }
-        }
+        },
+        "TextureFilter": "Bilinear"
       },
       {
         "__type": "Sandbox.ParticleConeEmitter",
         "__guid": "bbeb0177-d56b-48c7-8fdb-21b2d3d8c97b",
+        "__enabled": true,
         "Burst": 1,
         "CenterBias": 0,
         "CenterBiasVelocity": 0,
@@ -233,16 +277,10 @@
       }
     ],
     "Children": [],
-    "__variables": [],
     "__properties": {
-      "FixedUpdateFrequency": 50,
-      "MaxFixedUpdates": 5,
-      "NetworkFrequency": 30,
       "NetworkInterpolation": true,
-      "PhysicsSubSteps": 1,
-      "ThreadedAnimation": true,
       "TimeScale": 1,
-      "UseFixedUpdate": true,
+      "WantsSystemScene": true,
       "Metadata": {},
       "NavMesh": {
         "Enabled": false,
@@ -256,13 +294,14 @@
         "ExcludedBodies": "",
         "IncludedBodies": ""
       }
-    }
+    },
+    "__variables": []
   },
+  "ResourceVersion": 2,
   "ShowInMenu": false,
   "MenuPath": null,
   "MenuIcon": null,
   "DontBreakAsTemplate": false,
-  "ResourceVersion": 1,
   "__references": [],
-  "__version": 1
+  "__version": 2
 }
