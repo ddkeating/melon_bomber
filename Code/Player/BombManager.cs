@@ -1,4 +1,5 @@
 using Sandbox;
+using System;
 
 public sealed class BombManager : Component
 {
@@ -13,35 +14,34 @@ public sealed class BombManager : Component
     private const int bombFromGroundOffset = 0;
 
     // Gameplay variables
-    [Sync] public int maxBombCount { get; set; } = 1;
-    [Sync] private int bombCount { get; set; } = 0;
+	public int maxBombCount { get; set; } = 1;
+    private int bombCount { get; set; } = 0;
     public int radius = 1;
 	public int moveSpeedUpgrades = 1;
 	private float bombDetonationTime = 4.0f;
 
     protected override void OnStart()
     {
-        if (IsProxy) return;
-        if (Networking.IsClient)
-        {
-            Log.Info("BombManager is a client.");
-        }
+		_playerMovement = GameObject.GetComponent<PlayerMovement>();
+		if (Network.IsProxy) return;
         bombs = new List<GameObject>();
-        _playerMovement = GameObject.GetComponent<PlayerMovement>();
+
     }
 
     protected override void OnUpdate()
     {
-        // Check if the player presses the jump key and if they can place a bomb
-        if ( Input.Pressed( "jump" ) && !_playerMovement.IsDead && !IsProxy)
+		if (_playerMovement == null )
+		{
+			Log.Info( "PlayerMovement component not found." );
+		}
+		
+		// Check if the player presses the jump key and if they can place a bomb
+		if ( Input.Pressed( "jump" ) && !_playerMovement.IsDead && !Network.IsProxy)
         {
-            if ( bombCount < maxBombCount )
+			if ( bombCount < maxBombCount )
             {
-                SpawnBomb();
-            }
-            else
-            {
-                Log.Info( "Max bomb count reached." );
+
+				SpawnBomb();
             }
         }
 		
@@ -58,7 +58,7 @@ public sealed class BombManager : Component
 			Log.Error("MapLoader is not ready.");
 			return;
 		}
-		if ( bombPrefab == null || IsProxy )
+		if ( bombPrefab == null)
         {
             Log.Error( "Bomb prefab is not assigned." );
             return;
@@ -67,11 +67,7 @@ public sealed class BombManager : Component
         // Get grid position and ensure the space is empty
         var bombOnGrid = _mapLoader.GetGridPosition( GameObject.WorldPosition );
         if ( _mapLoader.GetGridValue( bombOnGrid ) != MapLoader.GridCellType.Empty && _mapLoader.GetGridValue( bombOnGrid ) != MapLoader.GridCellType.PlayerSpawn )
-        {
-            Log.Info( _mapLoader.GetGridValue( new Vector2( 0, 0 ) ) );
-            Log.Info( "Cannot place `bomb on non-empty space" );
             return;
-        }
 
         // Calculate the bomb position based on the grid
         Vector3 bombPosition = new Vector3( _mapLoader.GetWorldPosition( bombOnGrid ).x, _mapLoader.GetWorldPosition( bombOnGrid ).y, bombFromGroundOffset );
@@ -102,6 +98,7 @@ public sealed class BombManager : Component
     }
 
     // Method to handle bomb detonation (or removal of bombs from the list)
+
     public void OnBombDetonated( GameObject bomb )
     {
         if ( bomb != null && bombs.Contains( bomb ) )
@@ -111,8 +108,10 @@ public sealed class BombManager : Component
         }
     }
 
-    // Power-up methods
-    public void IncreaseBombRadius()
+
+
+	// Power-up methods
+	public void IncreaseBombRadius()
     {
         radius++;
         var clone = textParticle.Clone( GameObject.WorldPosition + Vector3.Up * 100, GameObject.WorldRotation );

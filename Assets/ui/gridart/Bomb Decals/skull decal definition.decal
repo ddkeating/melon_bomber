@@ -1,0 +1,16 @@
+{
+  "ColorTexture": "ui/gridart/bomb decals/skull decal.vtex",
+  "NormalTexture": null,
+  "RoughMetalOcclusionTexture": null,
+  "EmissiveTexture": null,
+  "EmissionEnergy": 1,
+  "HeightTexture": null,
+  "ParallaxStrength": 1,
+  "Tint": "1,1,1,1",
+  "ColorMix": 1,
+  "Width": 25,
+  "Height": 25,
+  "FilterMode": "Anisotropic",
+  "__references": [],
+  "__version": 0
+}

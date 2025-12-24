@@ -1,6 +1,7 @@
 @using Sandbox;
 @using Sandbox.UI;
 @using Sandbox.Services.Players;
+@using System;
 @inherits PanelComponent
 @namespace Sandbox
 
@@ -9,37 +10,70 @@
         <div class="upper-container">
             <div class="game-info">
                 <label class="game-title">Terry Bomber</label>
-                <label class="game-description">Time to go boom</label>
             </div>
-            <button class="start-button" @onclick=@(() => BomberManager.StartGameButton())>
+            @if (!Networking.IsHost)
+            {
+                <div class="waiting-label">
+                    <h1>Waiting for Host to Start...</h1>
+                </div>
+            }
+            else 
+            {
+                <div class="game-settings">
+                    <div class="game-mode-container">
+                        <label>Game Mode:</label>
+                        <div class="game-mode-selector">
+                            <button class="arrow left" onclick=@(() => PrevGameMode())>&lt;</button>
+                            <span class="game-mode-label">@GameManager.SelectedGameMode.ToString()</span>
+                            <button class="arrow right" onclick=@(() => NextGameMode())>&gt;</button>
+                        </div>
+                    </div>
+                </div>
+            <button class="start-button" @onclick=@(() => GameManager.StartGameButton())>
                 <h1>Start Game</h1>
             </button>
+            }
         </div>
         <div class="lower-container">
             <div class="players">
-                <!--Player Icons-->
                 @for (int i = 0; i < 4; i++)
                 {
-                    @if (hudComponent != null && i < hudComponent.profiles.Count)
-                    {
-                        var profile = hudComponent.profiles.Values.ElementAt(i);
+                    var hasPlayer = i < GameNetworkManager.PlayerSlots.Count;
+                    var slot = hasPlayer ? GameNetworkManager.PlayerSlots[i] : new GameNetworkManager.PlayerSlot();
 
-                        <div class="player-container">
-                            <h1 class="player-name">@profile.Name</h1>
-                            <div class="player-avatar" style="background-image: url('@profile.Avatar');"></div>
+                    <div class="player-container">
+                        <div class="player-container-left">
+                            <h1 class="player-name">
+                                @(hasPlayer? slot.DisplayName : "Waiting...")
+                            </h1>
+
+                            @if (hasPlayer && Networking.IsHost && !slot.IsHost)
+                            {
+                                <Button class="player-kick-btn" onclick="@(() => GameNetworkManager.KickPlayer(slot.SteamId))">Kick</Button>
+                            }
                         </div>
-                    }
-                    else
-                    {
-                        <div class="player-container">
-                            <h1 class="player-name">Waiting...</h1>
-                            <div class="player-avatar"><h1>?</h1></div>
-                        </div>
-                    }
-                }
 
+                        @if (hasPlayer && slot.IsHost)
+                        {
+                            <Image src="/ui/icons/host_icon.png" class="host-icon" />
+                        }
 
+                        <div class="player-avatar"
+                             style="background-image: url('@(
+                             hasPlayer? slot.AvatarUrl: "/ui/icons/default_avatar.png"
+                                          )');">
+                        @if (!hasPlayer)
+                        {
+                            <h1>?</h1>
+                        }
+                    </div>
+                </div>
+                                }
+
+                <Button class="leave-btn">Leave Game</Button>
             </div>
+
+
 			
         </div>
     </div>
@@ -47,27 +81,46 @@
 
 @code
 {
-    private HUD hudComponent;
     protected override void OnStart()
     {
-        base.OnStart();
-        hudComponent = Scene.GetAllComponents<HUD>().FirstOrDefault();
+        GameNetworkManager.PlayerSlots.OnChanged += OnPlayerSlotsChanged;
+    }
+    protected override void OnDestroy()
+    {
+        // Always unsubscribe
+        GameNetworkManager.PlayerSlots.OnChanged -= OnPlayerSlotsChanged;
+    }
+
+    private void OnPlayerSlotsChanged( NetListChangeEvent<GameNetworkManager.PlayerSlot> change)
+    {
+        StateHasChanged();
     }
 
     protected override void OnUpdate()
     {
-        if (hudComponent == null)
-        {
-            hudComponent = Scene.GetAllComponents<HUD>().FirstOrDefault();
-            return;
-        }
-
-        if (BomberManager.StartGame)
+        if (GameManager.StartGame)
         {
             Destroy();
         }
     }
 
+    private GameManager.GameMode[] gameModes =
+        (GameManager.GameMode[])Enum.GetValues(typeof(GameManager.GameMode));
+
+    private void NextGameMode()
+    {
+        var currentIndex = Array.IndexOf(gameModes, GameManager.SelectedGameMode);
+        currentIndex = (currentIndex + 1) % gameModes.Length;
+        GameManager.SelectedGameMode = gameModes[currentIndex];
+    }
+
+    private void PrevGameMode()
+    {
+        var currentIndex = Array.IndexOf(gameModes, GameManager.SelectedGameMode);
+        currentIndex = (currentIndex - 1 + gameModes.Length) % gameModes.Length;
+        GameManager.SelectedGameMode = gameModes[currentIndex];
+        Log.Info("Called");
+    }
 
 
     /// <summary>

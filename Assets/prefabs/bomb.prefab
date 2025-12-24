@@ -12,6 +12,7 @@
     "NetworkMode": 1,
     "NetworkInterpolation": true,
     "NetworkOrphaned": 0,
+    "NetworkTransmit": true,
     "OwnerTransfer": 1,
     "Components": [
       {
@@ -37,7 +38,7 @@
           "BloomLayer": false,
           "AfterUILayer": false
         },
-        "RenderType": "On",
+        "RenderType": "Off",
         "Tint": "1,1,1,1"
       },
       {
@@ -45,6 +46,7 @@
         "__guid": "621fb8dd-50e3-4850-aa19-f4c2f6637941",
         "__enabled": true,
         "Center": "0,0,0",
+        "ColliderFlags": 0,
         "Elasticity": null,
         "Friction": null,
         "IsTrigger": false,
@@ -188,6 +190,7 @@
         "NetworkMode": 2,
         "NetworkInterpolation": true,
         "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
         "OwnerTransfer": 1,
         "Components": [
           {
@@ -467,6 +470,7 @@
             "OnComponentStart": null,
             "OnComponentUpdate": null,
             "Opaque": false,
+            "PlaybackSpeed": 1,
             "RenderOptions": {
               "GameLayer": true,
               "OverlayLayer": false,
@@ -489,7 +493,8 @@
                     "LoopMode": "Loop",
                     "Frames": [
                       {
-                        "Texture": "textures/particles/smoke/smoke_static_a.vtex"
+                        "Texture": "textures/particles/smoke/smoke_static_a.vtex",
+                        "BroadcastMessages": []
                       }
                     ]
                   }
@@ -538,6 +543,7 @@
         "NetworkMode": 2,
         "NetworkInterpolation": true,
         "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
         "OwnerTransfer": 1,
         "Components": [
           {
@@ -712,6 +718,7 @@
             "OnComponentStart": null,
             "OnComponentUpdate": null,
             "Opaque": false,
+            "PlaybackSpeed": 1,
             "RenderOptions": {
               "GameLayer": true,
               "OverlayLayer": false,
@@ -734,7 +741,8 @@
                     "LoopMode": "Loop",
                     "Frames": [
                       {
-                        "Texture": "textures/shockwave.vtex"
+                        "Texture": "textures/shockwave.vtex",
+                        "BroadcastMessages": []
                       }
                     ]
                   }
@@ -832,6 +840,7 @@
         "NetworkMode": 2,
         "NetworkInterpolation": true,
         "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
         "OwnerTransfer": 1,
         "Components": [
           {
@@ -1015,7 +1024,7 @@
               "Type": "Curve",
               "Evaluation": "Life",
               "CurveA": {
-                "rangey": "0,40",
+                "rangey": "0,100",
                 "frames": [
                   {
                     "x": 0,
@@ -1070,15 +1079,15 @@
             "__version": 2,
             "Additive": true,
             "Alignment": "LookAtCamera",
-            "BlurAmount": 0.5,
-            "BlurOpacity": 0.5,
-            "BlurSpacing": 0.5,
+            "BlurAmount": 0.4869565,
+            "BlurOpacity": 0.45217392,
+            "BlurSpacing": 0.5478261,
             "DepthFeather": 0,
             "FaceVelocity": false,
             "FogStrength": 1,
-            "LeadingTrail": true,
+            "LeadingTrail": false,
             "Lighting": true,
-            "MotionBlur": false,
+            "MotionBlur": true,
             "OnComponentDestroy": null,
             "OnComponentDisabled": null,
             "OnComponentEnabled": null,
@@ -1086,6 +1095,7 @@
             "OnComponentStart": null,
             "OnComponentUpdate": null,
             "Opaque": false,
+            "PlaybackSpeed": 1,
             "RenderOptions": {
               "GameLayer": true,
               "OverlayLayer": false,
@@ -1108,7 +1118,8 @@
                     "LoopMode": "Loop",
                     "Frames": [
                       {
-                        "Texture": "textures/particles/base_sprite.vtex"
+                        "Texture": "textures/particles/base_sprite.vtex",
+                        "BroadcastMessages": []
                       }
                     ]
                   }
@@ -1124,7 +1135,7 @@
             "__type": "Sandbox.ParticleBoxEmitter",
             "__guid": "1de2be69-e3fb-47fb-b363-3f2494ba6902",
             "__enabled": true,
-            "Burst": 200,
+            "Burst": 50,
             "Delay": 0,
             "DestroyOnEnd": true,
             "Duration": 0.3,
@@ -1145,6 +1156,7 @@
             "__guid": "1a27c549-1c5f-4cf6-8591-f297af25e6f3",
             "__enabled": true,
             "Center": "0,0,0",
+            "ColliderFlags": 0,
             "Elasticity": null,
             "Friction": null,
             "IsTrigger": true,
@@ -1169,7 +1181,7 @@
             "__guid": "1e2b568c-d1de-4d4c-8011-aad337aa86e8",
             "__enabled": true,
             "Attenuation": 10.000002,
-            "Brightness": 4.2999988,
+            "Brightness": 4,
             "CastShadows": false,
             "LightColor": {
               "Type": "Constant",
@@ -1197,7 +1209,7 @@
               "ConstantA": "1,1,1,1",
               "ConstantB": "1,1,1,1"
             },
-            "MaximumLights": 4,
+            "MaximumLights": 2,
             "OnComponentDestroy": null,
             "OnComponentDisabled": null,
             "OnComponentEnabled": null,
@@ -1216,7 +1228,7 @@
         "__version": 1,
         "Flags": 0,
         "Name": "FuseBurning",
-        "Position": "-2.218177,0,30.23616",
+        "Position": "-2.218177,2.340322,50.77428",
         "Rotation": "0,0,0,1",
         "Scale": "1,1,1",
         "Tags": "particles",
@@ -1224,6 +1236,7 @@
         "NetworkMode": 2,
         "NetworkInterpolation": true,
         "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
         "OwnerTransfer": 1,
         "Components": [
           {
@@ -1355,7 +1368,7 @@
             "SequenceTime": 1,
             "SheetSequence": false,
             "StartDelay": 0,
-            "StartVelocity": 1,
+            "StartVelocity": 0.2,
             "Stretch": 0,
             "TimeScale": 1,
             "Timing": "GameTime",
@@ -1378,7 +1391,7 @@
             "FogStrength": 0,
             "LeadingTrail": true,
             "Lighting": true,
-            "MotionBlur": false,
+            "MotionBlur": true,
             "OnComponentDestroy": null,
             "OnComponentDisabled": null,
             "OnComponentEnabled": null,
@@ -1386,6 +1399,7 @@
             "OnComponentStart": null,
             "OnComponentUpdate": null,
             "Opaque": false,
+            "PlaybackSpeed": 1,
             "RenderOptions": {
               "GameLayer": true,
               "OverlayLayer": false,
@@ -1408,7 +1422,8 @@
                     "LoopMode": "Loop",
                     "Frames": [
                       {
-                        "Texture": "textures/particles/flares/light_glow_01.vtex"
+                        "Texture": "textures/particles/flares/light_glow_01.vtex",
+                        "BroadcastMessages": []
                       }
                     ]
                   }
@@ -1436,10 +1451,10 @@
             "OnComponentStart": null,
             "OnComponentUpdate": null,
             "OnEdge": false,
-            "Radius": 5,
-            "Rate": 40,
+            "Radius": 0,
+            "Rate": 100,
             "RateOverDistance": 0,
-            "Velocity": 265.19
+            "Velocity": 195.53076
           },
           {
             "__type": "Sandbox.ParticleLightRenderer",
@@ -1474,7 +1489,7 @@
               "ConstantA": "1,1,1,1",
               "ConstantB": "1,1,1,1"
             },
-            "MaximumLights": 8,
+            "MaximumLights": 1,
             "OnComponentDestroy": null,
             "OnComponentDisabled": null,
             "OnComponentEnabled": null,
@@ -1497,10 +1512,11 @@
         "Rotation": "0,0,0,1",
         "Scale": "1,1,1",
         "Tags": "particles",
-        "Enabled": true,
+        "Enabled": false,
         "NetworkMode": 2,
         "NetworkInterpolation": true,
         "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
         "OwnerTransfer": 1,
         "Components": [
           {
@@ -1641,6 +1657,7 @@
             "OnComponentStart": null,
             "OnComponentUpdate": null,
             "Opaque": false,
+            "PlaybackSpeed": 1,
             "RenderOptions": {
               "GameLayer": true,
               "OverlayLayer": false,
@@ -1663,7 +1680,8 @@
                     "LoopMode": "Loop",
                     "Frames": [
                       {
-                        "Texture": "textures/particles/flares/light_flare_01.vtex"
+                        "Texture": "textures/particles/flares/light_flare_01.vtex",
+                        "BroadcastMessages": []
                       }
                     ]
                   }
@@ -1681,9 +1699,9 @@
             "__enabled": true,
             "Burst": 1,
             "Delay": 0,
-            "DestroyOnEnd": true,
+            "DestroyOnEnd": false,
             "Duration": 5,
-            "Loop": false,
+            "Loop": true,
             "OnComponentDestroy": null,
             "OnComponentDisabled": null,
             "OnComponentEnabled": null,
@@ -1692,7 +1710,7 @@
             "OnComponentUpdate": null,
             "OnEdge": false,
             "Radius": 0,
-            "Rate": 0,
+            "Rate": 37.939915,
             "RateOverDistance": 0,
             "Velocity": 0
           }
@@ -1712,6 +1730,7 @@
         "NetworkMode": 2,
         "NetworkInterpolation": true,
         "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
         "OwnerTransfer": 1,
         "Components": [
           {
@@ -1762,6 +1781,100 @@
               "Id": "c0af70bb-8751-4771-b614-95844cd70741"
             },
             "Volume": 1
+          }
+        ],
+        "Children": []
+      },
+      {
+        "__guid": "15e9e391-0d05-4190-b75b-b99708a1acfe",
+        "__version": 1,
+        "Flags": 0,
+        "Name": "Decal",
+        "Position": "-1.726604,0,22.62546",
+        "Rotation": "0,0.7071068,0,0.7071068",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkInterpolation": true,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.Decal",
+            "__guid": "9e4ec52b-f3bb-4a40-b141-fef4b13ea7a8",
+            "__enabled": true,
+            "__version": 3,
+            "AttenuationAngle": 0.31284916,
+            "ColorMix": 1,
+            "ColorTint": {
+              "Type": "Constant",
+              "Evaluation": "Life",
+              "GradientA": {
+                "blend": "Linear",
+                "color": [
+                  {
+                    "t": 0,
+                    "c": "0.5451,0,0,1"
+                  },
+                  {
+                    "t": 0.33,
+                    "c": "1,0,0,1"
+                  },
+                  {
+                    "t": 0.66,
+                    "c": "1,0.64706,0,1"
+                  },
+                  {
+                    "t": 1,
+                    "c": "1,1,0,1"
+                  }
+                ],
+                "alpha": [
+                  {
+                    "t": 0,
+                    "a": 1
+                  },
+                  {
+                    "t": 1,
+                    "a": 1
+                  }
+                ]
+              },
+              "GradientB": {
+                "blend": "Linear",
+                "color": [
+                  {
+                    "t": 0.5,
+                    "c": "1,1,1,1"
+                  }
+                ],
+                "alpha": []
+              },
+              "ConstantA": "20,20,20,1",
+              "ConstantB": "1,1,1,1"
+            },
+            "Decals": [
+              "ui/gridart/bomb decals/skull decal definition.decal"
+            ],
+            "Depth": -38,
+            "LifeTime": 20,
+            "Looped": false,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "Parallax": 0,
+            "Rotation": 0,
+            "Scale": 1,
+            "SequenceId": 119,
+            "SheetSequence": false,
+            "Size": "1,1",
+            "SortLayer": 0,
+            "Transient": false
           }
         ],
         "Children": []

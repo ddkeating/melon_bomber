@@ -12,9 +12,9 @@ public sealed class PlayerMovement : Component, Component.ITriggerListener
 	// === STATE ===
 	[Sync] public bool IsDead { get; set; }
 
-	private Vector2 currentGridPos;
-	private Vector2 targetGridPos;
-	private bool isMoving;
+	[Sync] private Vector2 currentGridPos { get; set; }
+	[Sync] private Vector2 targetGridPos { get; set; }
+	[Sync] private bool isMoving { get; set; }
 	private bool canMove = false;
 
 	private float ragdollTimer;
@@ -32,6 +32,7 @@ public sealed class PlayerMovement : Component, Component.ITriggerListener
 	// === SETUP ===
 	protected override void OnStart()
 	{
+
 		mapLoader = Scene.GetAllComponents<MapLoader>().FirstOrDefault();
 		anim = Components.Get<CitizenAnimationHelper>();
 		characterController = Components.Get<CharacterController>();
@@ -40,15 +41,18 @@ public sealed class PlayerMovement : Component, Component.ITriggerListener
 	// === INPUT ===
 	protected override void OnUpdate()
 	{
-		if ( mapLoader == null || !mapLoader.IsMapReady || IsDead ) return;
+		if ( mapLoader == null || !mapLoader.IsMapReady || IsDead) return;
 
-		if ( !canMove )
+		if ( !Network.IsProxy )
 		{
-			InitializeGridPosition();
-			canMove = true;
+			if ( !canMove )
+			{
+				InitializeGridPosition();
+				canMove = true;
+			}
+			HandleInput();
 		}
 
-		HandleInput();
 		UpdateAnimation();
 		RotateBody();
 	}
@@ -85,14 +89,13 @@ public sealed class PlayerMovement : Component, Component.ITriggerListener
 		if ( !CanMoveTo( nextCell ) ) return;
 
 		targetGridPos = nextCell;
-		Log.Info( $"Target Grid Pos: {mapLoader.GetWorldPosition(targetGridPos)}" );
 		isMoving = true;
 	}
 
 
 	private bool CanMoveTo( Vector2 gridPos )
 	{
-		if ( !mapLoader.IsValidGridPosition(gridPos)) return false;
+		if ( !MapLoader.IsValidGridPosition(gridPos)) return false;
 		var value = mapLoader.GetGridValue( gridPos );
 		return value == MapLoader.GridCellType.Empty || value == MapLoader.GridCellType.PowerUp || value == MapLoader.GridCellType.PlayerSpawn;
 	}
@@ -191,6 +194,27 @@ public sealed class PlayerMovement : Component, Component.ITriggerListener
 		} 
 	}
 
+	[Rpc.Broadcast]
+	private void RequestMove( Vector2 dir )
+	{
+		if ( IsDead ) return;
+
+		Vector2 nextCell = currentGridPos + dir;
+
+		if ( !MapLoader.IsValidGridPosition( nextCell ) ) return;
+
+		var value = mapLoader.GetGridValue( nextCell );
+
+		if ( value is not
+			MapLoader.GridCellType.Empty and
+			not MapLoader.GridCellType.PowerUp and
+			not MapLoader.GridCellType.PlayerSpawn )
+			return;
+
+		targetGridPos = nextCell;
+		isMoving = true;
+	}
+
 
 	// === DEATH ===
 	public void Kill()
@@ -210,7 +234,6 @@ public sealed class PlayerMovement : Component, Component.ITriggerListener
 			ragdoll.Model = renderer.Model;
 			ragdoll.Renderer = renderer;
 		}
-		Log.Info( $"Ragdoll model: {ragdoll.Bodies}" );
 
 		// Launch upward: apply velocity to all ragdoll bodies
 		foreach ( var body in ragdoll.Bodies )

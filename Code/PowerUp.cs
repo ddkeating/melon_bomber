@@ -68,7 +68,7 @@ public sealed class PowerUp : Component
         }
         var powerUpOnGrid = _mapLoader.GetGridPosition( GameObject.WorldPosition );
         _mapLoader.SetGridValue( powerUpOnGrid, MapLoader.GridCellType.Empty );
-        _mapLoader._powerUpCount--;
+        _mapLoader.DecreasePowerUpCount();
     }
 
     public void IncreaseRadius()

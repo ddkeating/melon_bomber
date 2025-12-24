@@ -2,7 +2,7 @@
   "Images": null,
   "Sequences": [
     {
-      "Source": "textures/power ups/radius.png",
+      "Source": "ui/gridart/radius.png",
       "IsLooping": true,
       "FlipBook": false,
       "Columns": 0,

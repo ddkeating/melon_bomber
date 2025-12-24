@@ -1,6 +1,6 @@
 {
   "UI": true,
-  "Volume": "1.5",
+  "Volume": "1",
   "Pitch": "0.8",
   "Decibels": 70,
   "SelectionMode": "Random",
@@ -43,6 +43,10 @@
       "mode": "Mirrored"
     }
   ],
+  "DefaultMixer": {
+    "Name": "game",
+    "Id": "052ed1b5-03d7-4674-a7fa-5342d9165e09"
+  },
   "__references": [],
   "__version": 1
 }

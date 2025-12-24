@@ -32,11 +32,13 @@ public sealed class Bomb : Component
         _boxCollider.IsTrigger = true;
         
         _mapLoader = Scene.GetAllComponents<MapLoader>().FirstOrDefault();
-		_bombManager = Scene.GetAllComponents<BombManager>().FirstOrDefault();
+		_bombManager = Scene.GetAllComponents<BombManager>().Where( x => x.Network.Owner == Network.Owner ).FirstOrDefault();
 		cameraShake = Scene.Camera.GetComponent<CameraShake>();
 
 		bombGridPos = _mapLoader.GetGridPosition( GameObject.WorldPosition );
 		_mapLoader.SetGridValue( bombGridPos, MapLoader.GridCellType.Bomb );
+
+
 
 		if ( _mapLoader == null || !_mapLoader.IsMapReady )
 		{
@@ -70,24 +72,15 @@ public sealed class Bomb : Component
         CloneExplosion( GameObject.WorldPosition );
         ExplodeOnOtherTiles();
 
-    
         GameObject.Destroy();
         _bombManager.OnBombDetonated( GameObject );
-    }
+	}
 
     private void ExplodeOnOtherTiles()
     {
         var bombOnGrid = _mapLoader.GetGridPosition( GameObject.WorldPosition );
         var gridSize = MapLoader.GridSize;
-
-        void TryCloneExplosion( Vector2 gridPosition )
-        {
-            if ( IsValidGridPosition( gridPosition, gridSize ) && !IsIndestructibleWall( gridPosition ) )
-            {
-                CloneExplosion( _mapLoader.GetWorldPosition( gridPosition ) );
-                _mapLoader.DestroyGameObjectAt( gridPosition );
-            }
-        }
+		List<Vector2> affectedPositions = new List<Vector2> { bombOnGrid};
 
 		void ProcessDirection( Vector2 direction )
 		{
@@ -105,6 +98,8 @@ public sealed class Bomb : Component
 				// 💥 Always explode on valid non-indestructible tiles
 				CloneExplosion( _mapLoader.GetWorldPosition( position ) );
 
+				affectedPositions.Add( position );
+
 				// 🧱 Destroy breakable walls and stop
 				if ( IsWall( position ) )
 				{
@@ -120,7 +115,9 @@ public sealed class Bomb : Component
         ProcessDirection( new Vector2( 0, -1 ) ); // Left
         ProcessDirection( new Vector2( 1, 0 ) ); // Up
         ProcessDirection( new Vector2( -1, 0 ) ); // Down
-    }
+
+		_mapLoader.RpcSetGridValuesToEmpty( affectedPositions.ToArray() );
+	}
 
     private bool IsValidGridPosition( Vector2 gridPosition, int gridSize )
     {

@@ -2,7 +2,7 @@
   "Images": null,
   "Sequences": [
     {
-      "Source": "textures/power ups/bomb.png",
+      "Source": "ui/gridart/boots.png",
       "IsLooping": true,
       "FlipBook": false,
       "Columns": 0,

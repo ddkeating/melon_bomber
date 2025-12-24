@@ -2,7 +2,7 @@
   "Images": null,
   "Sequences": [
     {
-      "Source": "textures/power ups/boots.png",
+      "Source": "ui/gridart/bomb decals/skull decal.png",
       "IsLooping": true,
       "FlipBook": false,
       "Columns": 0,

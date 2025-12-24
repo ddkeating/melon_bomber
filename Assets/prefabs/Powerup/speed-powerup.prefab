@@ -12,6 +12,7 @@
     "NetworkMode": 2,
     "NetworkInterpolation": true,
     "NetworkOrphaned": 0,
+    "NetworkTransmit": true,
     "OwnerTransfer": 1,
     "Components": [
       {
@@ -19,6 +20,7 @@
         "__guid": "f6482aac-fb6f-4ac7-aaef-e2a727e94b0b",
         "__enabled": true,
         "Center": "0,0,0",
+        "ColliderFlags": 0,
         "Elasticity": null,
         "Friction": null,
         "IsTrigger": true,
@@ -52,6 +54,9 @@
         "FogStrength": 1,
         "IsSorted": false,
         "Lighting": true,
+        "OnAnimationEnd": null,
+        "OnAnimationStart": null,
+        "OnBroadcastMessage": null,
         "OnComponentDestroy": null,
         "OnComponentDisabled": null,
         "OnComponentEnabled": null,
@@ -59,6 +64,7 @@
         "OnComponentStart": null,
         "OnComponentUpdate": null,
         "Opaque": false,
+        "OverlayColor": "1,1,1,0",
         "PlaybackSpeed": 1,
         "RenderOptions": {
           "GameLayer": true,
@@ -80,7 +86,8 @@
                 "LoopMode": "Loop",
                 "Frames": [
                   {
-                    "Texture": "textures/power ups/boots.vtex"
+                    "Texture": "ui/gridart/boots.vtex",
+                    "BroadcastMessages": []
                   }
                 ]
               }
@@ -118,6 +125,7 @@
         "NetworkMode": 2,
         "NetworkInterpolation": true,
         "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
         "OwnerTransfer": 1,
         "Components": [
           {

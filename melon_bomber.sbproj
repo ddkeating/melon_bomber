@@ -5,7 +5,7 @@
   "Ident": "melon_bomber",
   "Schema": 1,
   "IncludeSourceFiles": false,
-  "Resources": null,
+  "Resources": "/ui/icons/*\n/ui/gridart/*",
   "PackageReferences": [],
   "EditorReferences": null,
   "Mounts": null,

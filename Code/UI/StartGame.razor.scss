@@ -4,8 +4,8 @@ StartGame {
     left: 0;
     right: 0;
     bottom: 0;
-    padding: 50px;
-    background: linear-gradient(180deg, #e77517a2 0%, #000000d3 100%);
+    padding: 1rem 2rem;
+    background: linear-gradient(350deg, #6f5c5cb0 0%, #3a507dcf 50%, #e77517d5 100%);
     font-weight: bold;
     font-family: poppins;
     cursor: default;
@@ -28,6 +28,10 @@ StartGame {
         align-items: flex-start;
     }
 
+    .lower-container {
+        height: 100%;
+    }
+
     .game-info {
         display: flex;
         flex-direction: column;
@@ -39,42 +43,64 @@ StartGame {
         font-size: 10rem;
         color: rgb(247, 90, 0);
         line-height: 100px;
-    }
-
-    .game-description {
-        color: white;
-        font-size: 3rem;
-        font-weight: 500;
-        text-transform: uppercase;
-        letter-spacing: 1px;
+        text-shadow: 5px 2px 1px #4f4e4e;
     }
 
     .players {
         position: relative;
         display: flex;
         flex-direction: column;
-        justify-content: space-evenly;
+        justify-content: space-between;
         gap: 20px;
     }
 
     .player-container {
         display: flex;
-        text-align: right;
-        justify-content: flex-end;
+        justify-content: space-between;
         align-items: flex-start;
         gap: 20px;
+        background-color: rgb(0, 0, 0, 0.3);
+        border-radius: 10px;
+        padding: 2px 10px;
+        width: 40rem;
     }
 
-        .player-container .player-name {
+    .player-container-left {
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+        padding: 5px 0px;
+    }
+
+    .player-kick-btn {
+        background-color: white;
+        width: 5rem;
+        font-weight: bold;
+        font-size: 1.75rem;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+        pointer-events: all;
+        cursor: pointer;
+        color: black;
+        transition: background-color 0.3s;
+    }
+
+        .player-kick-btn:hover {
+            background-color: rgb(243, 105, 26);
             color: white;
-            font-size: 4rem;
-            text-shadow: 2px 2px 2px #000000;
         }
+
+    .player-container .player-name {
+        color: white;
+        font-size: 3rem;
+        text-shadow: 2px 2px 2px #000000;
+    }
 
     .player-avatar {
         position: relative;
-        width: 16rem;
-        height: 16rem;
+        width: 14rem;
+        height: 14rem;
         border-radius: 50%;
         border: 0.5rem solid white;
         background-position: center;
@@ -88,7 +114,7 @@ StartGame {
         background-color: rgb(101, 101, 101, 0.58);
     }
 
-    .start-button {
+    .start-button, .leave-btn {
         position: relative;
         height: 150px;
         align-items: center;
@@ -114,5 +140,92 @@ StartGame {
 
         .start-button:hover h1 {
             color: white;
+        }
+
+    .waiting-label {
+        font-size: 4rem;
+        color: white;
+        text-transform: uppercase;
+        text-align: center;
+        border-bottom: 2px solid white;
+    }
+
+    .lobby-interactions {
+        display: flex;
+        flex-direction: row;
+        gap: 20px;
+    }
+
+    .leave-btn {
+        font-size: 3rem;
+        font-weight: bold;
+        color: black;
+        text-transform: uppercase;
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .leave-btn:hover {
+            background-color: rgb(220, 53, 69);
+            color: white;
+        }
+
+    .host-icon {
+        position: absolute;
+        z-index: 99;
+        transform: rotate(35deg);
+        width: 5rem;
+        right: 0px;
+        top: -.5rem;
+    }
+
+    .game-settings {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        background-color: #f29040d5;
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 10px;
+        box-shadow: 2px 2px 1px #6f5c5cb0;
+        font-size: 2rem;
+    }
+
+    .game-mode-container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        width: 30rem;
+        align-items: flex-start;
+    }
+
+    .game-mode-selector {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #bd6a27d9;
+        border-radius: 25px;
+    }
+
+    .game-mode-label {
+        font-size: 2.25rem;
+        min-width: 300px;
+        text-align: center;
+        justify-content: center;
+    }
+
+    .arrow {
+        background-color: #333;
+        color: white;
+        font-weight: bold;
+        border-radius: 20px;
+        padding: 0.25rem 1.25rem;
+        cursor: pointer;
+        transition: background-color 0.1s;
+    }
+
+        .arrow:hover {
+            background-color: rgb(200, 49, 63);
         }
 }

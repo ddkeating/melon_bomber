@@ -4,8 +4,7 @@
 @inherits PanelComponent
 @namespace Sandbox
 
-<root style="@(BomberManager.StartGame ? "opacity: 1" : "opacity: 0")">
-
+<root style="opacity:@(GameManager.StartGame ? "1" : "0")">
 
 	<div class="HUD-container">
         <div class="left-container">
@@ -17,7 +16,7 @@
                 </div>
             }
         </div>
-        @if (bm != null && BomberManager.StartGame)
+        @if (bm != null && GameManager.StartGame)
         {
         <div class="right-container">
             <div class="power-up">
@@ -41,6 +40,7 @@
 {
     private BombManager bm;
     public readonly Dictionary<long, Profile> profiles = new();
+
     [Property(Title = "Radius Power Up Sprite")]
     public string RadiusPowerUpSprite { get; set; }
     [Property(Title = "Bomb Power Up Sprite")]
@@ -98,7 +98,7 @@
     protected override int BuildHash()
     {
         return System.HashCode.Combine(
-            BomberManager.StartGame,
+            GameManager.StartGame,
             bm?.radius ?? 0,
             bm?.moveSpeedUpgrades ?? 0,
             bm?.maxBombCount ?? 0
