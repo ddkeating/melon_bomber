@@ -157,7 +157,7 @@
           "BackgroundColor": "0,0.68753,1,1",
           "ClearFlags": "All",
           "EnablePostProcessing": true,
-          "FieldOfView": 60,
+          "FieldOfView": 70,
           "FovAxis": "Horizontal",
           "IsMainCamera": true,
           "OnComponentDestroy": null,
@@ -249,7 +249,7 @@
       "Rotation": "0,0,0,1",
       "Scale": "1,1,1",
       "Tags": "platform",
-      "Enabled": true,
+      "Enabled": false,
       "NetworkMode": 2,
       "NetworkInterpolation": true,
       "NetworkOrphaned": 0,
@@ -293,16 +293,16 @@
               "13,13",
               "12,0",
               "13,0",
-              "14,0",
+              "0.875,0",
               "0,0",
               "14,0",
               "0,13",
               "12,0",
-              "14,-1",
+              "0.875,-0.0625",
               "-14,0",
-              "-12,-1",
-              "14,14",
-              "-12,0",
+              "-0.75,-0.0625",
+              "0.875,0.875",
+              "-0.75,0",
               "14,-1",
               "12,-1",
               "-14,0",
@@ -314,11 +314,11 @@
               "-12,-12",
               "-12,-1",
               "14,-12",
-              "16,16",
+              "1,1",
               "14,14",
-              "16,-14",
+              "1,-0.875",
               "-16,-1",
-              "14,-12",
+              "0.875,-0.75",
               "16,-14",
               "-14,16",
               "-12,14",
@@ -357,11 +357,11 @@
               "1,0,0",
               "1,0,0",
               "1,0,0",
-              "1,0,0",
+              "1,-0,0",
               "0,-1,0",
               "-1,0,0",
               "0,1,0",
-              "1,0,0"
+              "1,-0,0"
             ],
             "TextureVAxis": [
               "0,-1,0",
@@ -372,11 +372,11 @@
               "0,-1,0",
               "0,-1,0",
               "0,-1,0",
-              "0,-1,0",
+              "0,-1,-0",
+              "-0,0,-1",
               "0,0,-1",
               "0,0,-1",
-              "0,0,-1",
-              "0,0,-1",
+              "-0,0,-1",
               "0,-1,0"
             ],
             "TextureScale": [
@@ -396,7 +396,7 @@
               "0.25,0.25"
             ],
             "TextureOffset": [
-              "3072,3072",
+              "0,0",
               "0,0",
               "0,0",
               "0,0",
@@ -413,11 +413,11 @@
             ],
             "MaterialIndex": [
               0,
+              2,
               1,
               1,
               1,
-              1,
-              1,
+              2,
               1,
               1,
               1,
@@ -487,7 +487,8 @@
             ],
             "Materials": [
               "materials/dev/reflectivity_30.vmat",
-              "materials/dev/dev_measuregeneric01.vmat"
+              "materials/dev/dev_measuregeneric01.vmat",
+              "materials/map/brick tiling.vmat"
             ]
           },
           "OnComponentDestroy": null,
@@ -651,8 +652,30 @@
       "OwnerTransfer": 1,
       "Components": [
         {
-          "__type": "Sandbox.NetworkHelper",
-          "__guid": "3b7b0527-8ce3-46c5-aeb3-f787bd866b26",
+          "__type": "GameNetworkManager",
+          "__guid": "581fe89d-bc15-4fe7-8ef4-9bad51420850",
+          "__enabled": true,
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null
+        },
+        {
+          "__type": "GameManager",
+          "__guid": "e720cf84-7f51-424c-a30c-3c72b0dff6de",
+          "__enabled": true,
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null
+        },
+        {
+          "__type": "CustomNetworkHelper",
+          "__guid": "04bbaca2-cac5-428b-b640-65762d08758f",
           "__enabled": true,
           "OnComponentDestroy": null,
           "OnComponentDisabled": null,
@@ -683,28 +706,6 @@
             }
           ],
           "StartServer": true
-        },
-        {
-          "__type": "GameNetworkManager",
-          "__guid": "581fe89d-bc15-4fe7-8ef4-9bad51420850",
-          "__enabled": true,
-          "OnComponentDestroy": null,
-          "OnComponentDisabled": null,
-          "OnComponentEnabled": null,
-          "OnComponentFixedUpdate": null,
-          "OnComponentStart": null,
-          "OnComponentUpdate": null
-        },
-        {
-          "__type": "GameManager",
-          "__guid": "e720cf84-7f51-424c-a30c-3c72b0dff6de",
-          "__enabled": true,
-          "OnComponentDestroy": null,
-          "OnComponentDisabled": null,
-          "OnComponentEnabled": null,
-          "OnComponentFixedUpdate": null,
-          "OnComponentStart": null,
-          "OnComponentUpdate": null
         }
       ],
       "Children": []
@@ -724,7 +725,39 @@
       "NetworkOrphaned": 0,
       "NetworkTransmit": true,
       "OwnerTransfer": 1,
-      "Components": [],
+      "Components": [
+        {
+          "__type": "Sandbox.ErrorLogComponent",
+          "__guid": "41600246-b269-4cc6-b53c-f252e913eade",
+          "__enabled": true,
+          "errorIcon": null,
+          "infoIcon": null,
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null,
+          "warningIcon": "ui/icons/warning.png"
+        },
+        {
+          "__type": "Sandbox.ScreenPanel",
+          "__guid": "e4647051-0525-4ef2-a9fe-ccb904eb24f4",
+          "__enabled": true,
+          "AutoScreenScale": true,
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null,
+          "Opacity": 1,
+          "Scale": 1,
+          "ScaleStrategy": "ConsistentHeight",
+          "TargetCamera": null,
+          "ZIndex": 100
+        }
+      ],
       "Children": [
         {
           "__guid": "7e40352e-9166-4035-8266-3a30c2229050",
@@ -757,7 +790,7 @@
               "Scale": 1,
               "ScaleStrategy": "ConsistentHeight",
               "TargetCamera": null,
-              "ZIndex": 100
+              "ZIndex": 1
             },
             {
               "__type": "Sandbox.WorldInput",
@@ -781,7 +814,8 @@
               "OnComponentEnabled": null,
               "OnComponentFixedUpdate": null,
               "OnComponentStart": null,
-              "OnComponentUpdate": null
+              "OnComponentUpdate": null,
+              "RequireMorePlayersToStart": false
             }
           ],
           "Children": []
@@ -817,7 +851,7 @@
               "Scale": 1,
               "ScaleStrategy": "ConsistentHeight",
               "TargetCamera": null,
-              "ZIndex": 100
+              "ZIndex": 1
             },
             {
               "__type": "Sandbox.HUD",
@@ -938,6 +972,14 @@
           },
           {
             "Target": {
+              "Type": "Component",
+              "IdValue": "55be9309-8f1d-4370-867c-f76f28651c4b"
+            },
+            "Property": "MaxPowerUpCount",
+            "Value": 4
+          },
+          {
+            "Target": {
               "Type": "GameObject",
               "IdValue": "be705698-801b-48e5-a1dc-93acab629256"
             },
@@ -960,6 +1002,51 @@
         "83bcd2a2-1005-4388-8dfa-8d0ad6b11761": "c174ddec-c94a-4c92-94f4-d1a56e70d3c9",
         "6871a375-e933-483e-9b15-64c357b7795c": "0473ee11-d3d4-4886-91f5-0645256adb84"
       }
+    },
+    {
+      "__guid": "258d670f-9e30-4928-94ee-df3e78c81ecb",
+      "__version": 1,
+      "Flags": 0,
+      "Name": "arena-template",
+      "Position": "28.56229,-28.83743,0",
+      "Rotation": "0,0,0,1",
+      "Scale": "1,1,1",
+      "Tags": "",
+      "Enabled": true,
+      "NetworkMode": 2,
+      "NetworkInterpolation": true,
+      "NetworkOrphaned": 0,
+      "NetworkTransmit": true,
+      "OwnerTransfer": 1,
+      "Components": [
+        {
+          "__type": "Sandbox.ModelRenderer",
+          "__guid": "b1b1a108-e1f5-43c3-93d9-56d2c17edceb",
+          "__enabled": true,
+          "BodyGroups": 18446744073709551615,
+          "CreateAttachments": false,
+          "LodOverride": null,
+          "MaterialGroup": null,
+          "MaterialOverride": null,
+          "Materials": null,
+          "Model": "models/arena-template.vmdl",
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null,
+          "RenderOptions": {
+            "GameLayer": true,
+            "OverlayLayer": false,
+            "BloomLayer": false,
+            "AfterUILayer": false
+          },
+          "RenderType": "On",
+          "Tint": "1,1,1,1"
+        }
+      ],
+      "Children": []
     }
   ],
   "SceneProperties": {

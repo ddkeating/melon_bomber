@@ -29,7 +29,7 @@
                         </div>
                     </div>
                 </div>
-            <button class="start-button" @onclick=@(() => GameManager.StartGameButton())>
+            <button class="start-button" @onclick=@(() => CheckGameStart())>
                 <h1>Start Game</h1>
             </button>
             }
@@ -43,9 +43,14 @@
 
                     <div class="player-container">
                         <div class="player-container-left">
+                            @if (hasPlayer && !Connection.All[i].IsConnecting)
+                            {
+                                StateHasChanged();
+                            }
                             <h1 class="player-name">
-                                @(hasPlayer? slot.DisplayName : "Waiting...")
+                                @( !hasPlayer ? "Waiting..." : (i < Connection.All.Count && Connection.All[i].IsConnecting) ? "Connecting..." : slot.DisplayName )
                             </h1>
+
 
                             @if (hasPlayer && Networking.IsHost && !slot.IsHost)
                             {
@@ -58,10 +63,7 @@
                             <Image src="/ui/icons/host_icon.png" class="host-icon" />
                         }
 
-                        <div class="player-avatar"
-                             style="background-image: url('@(
-                             hasPlayer? slot.AvatarUrl: "/ui/icons/default_avatar.png"
-                                          )');">
+                        <div class="player-avatar" style="background-image: url('@(hasPlayer && !Connection.All[i].IsConnecting ? slot.AvatarUrl : "/ui/icons/default_avatar.png")');">
                         @if (!hasPlayer)
                         {
                             <h1>?</h1>
@@ -70,7 +72,7 @@
                 </div>
                                 }
 
-                <Button class="leave-btn">Leave Game</Button>
+                <Button class="leave-btn" onclick="@(() => DisconnectClient())">Leave Game</Button>
             </div>
 
 
@@ -81,6 +83,7 @@
 
 @code
 {
+    [Property] private bool RequireMorePlayersToStart { get; set; } = true;
     protected override void OnStart()
     {
         GameNetworkManager.PlayerSlots.OnChanged += OnPlayerSlotsChanged;
@@ -100,9 +103,35 @@
     {
         if (GameManager.StartGame)
         {
-            Destroy();
+            GameObject.Destroy();
         }
     }
+
+    private void DisconnectClient()
+    {
+        if (Network.IsProxy) return;
+        Game.Disconnect();
+    }
+
+    private void CheckGameStart()
+    {
+        if (!Networking.IsHost) return;
+        if (GameNetworkManager.PlayerSlots.Count < 2 && RequireMorePlayersToStart)
+        {
+            ErrorLogComponent.SetMessage("Not enough players to start the game.", ErrorLogComponent.LogType.Warning);
+            return;
+        }
+        foreach (var conn in Connection.All)
+        {
+            if (conn.IsConnecting)
+            {
+                ErrorLogComponent.SetMessage("Some players are still connecting.", ErrorLogComponent.LogType.Warning);
+            }
+        }
+        GameManager.StartGame = true;
+    }
+
+
 
     private GameManager.GameMode[] gameModes =
         (GameManager.GameMode[])Enum.GetValues(typeof(GameManager.GameMode));
@@ -121,9 +150,4 @@
         GameManager.SelectedGameMode = gameModes[currentIndex];
         Log.Info("Called");
     }
-
-
-    /// <summary>
-    /// the hash determines if the system should be rebuilt. If it changes, it will be rebuilt
-    /// </summary>
 }

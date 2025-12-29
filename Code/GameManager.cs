@@ -28,7 +28,7 @@ public sealed class GameManager : Component
 	[Rpc.Broadcast]
     public static void StartGameButton()
     {
-        StartGame = true;
+		StartGame = true;
     }
 
 

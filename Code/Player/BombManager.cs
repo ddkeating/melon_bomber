@@ -12,13 +12,20 @@ public sealed class BombManager : Component
     [Sync] private List<GameObject> bombs { get; set; }
 
     private const int bombFromGroundOffset = 0;
+	public enum BombType
+	{
+		Standard,
+		Remote,
+		Atomic
+	}
+	[Property] public BombType CurrentBombType { get; set; } = BombType.Standard;
 
-    // Gameplay variables
-	public int maxBombCount { get; set; } = 1;
-    private int bombCount { get; set; } = 0;
-    public int radius = 1;
-	public int moveSpeedUpgrades = 1;
-	private float bombDetonationTime = 4.0f;
+	// Gameplay variables
+	public int MaxBombCount { get; set; } = 1;
+    private int BombCount { get; set; } = 0;
+    public int Radius { get; set; } = 1;
+	public int MoveSpeedUpgrades { get; set; } = 1;
+	private float BombDetonationTime { get; set; } = 4.0f;
 
     protected override void OnStart()
     {
@@ -38,7 +45,7 @@ public sealed class BombManager : Component
 		// Check if the player presses the jump key and if they can place a bomb
 		if ( Input.Pressed( "jump" ) && !_playerMovement.IsDead && !Network.IsProxy)
         {
-			if ( bombCount < maxBombCount )
+			if ( BombCount < MaxBombCount )
             {
 
 				SpawnBomb();
@@ -92,9 +99,9 @@ public sealed class BombManager : Component
         }
 
         // Set the detonation time and increase bomb count
-        bombComponent.SetDetonationTime( bombDetonationTime );
-        bombComponent.SetRadius( radius );
-        bombCount++;
+        bombComponent.SetDetonationTime( BombDetonationTime );
+        bombComponent.SetRadius( Radius );
+        BombCount++;
     }
 
     // Method to handle bomb detonation (or removal of bombs from the list)
@@ -104,7 +111,7 @@ public sealed class BombManager : Component
         if ( bomb != null && bombs.Contains( bomb ) )
         {
             bombs.Remove( bomb );
-            bombCount--;
+            BombCount--;
         }
     }
 
@@ -113,25 +120,53 @@ public sealed class BombManager : Component
 	// Power-up methods
 	public void IncreaseBombRadius()
     {
-        radius++;
-        var clone = textParticle.Clone( GameObject.WorldPosition + Vector3.Up * 100, GameObject.WorldRotation );
-        clone.GetComponent<ParticleTextRenderer>().Text = new Sandbox.TextRendering.Scope("+1 Radius", color: Color.White, size: 128);
+		if ( Radius >= MapLoader.GridSize)
+		{
+			var clone = textParticle.Clone( GameObject.WorldPosition + Vector3.Up * 100, GameObject.WorldRotation );
+			clone.GetComponent<ParticleTextRenderer>().Text = new Sandbox.TextRendering.Scope("Max Radius Reached", color: Color.Red, size: 128);
+		}
+		else
+		{
+			Radius++;
+			var clone = textParticle.Clone( GameObject.WorldPosition + Vector3.Up * 100, GameObject.WorldRotation );
+			clone.GetComponent<ParticleTextRenderer>().Text = new Sandbox.TextRendering.Scope("+1 Radius", color: Color.White, size: 128);
+		}
     }
 
     public void IncreaseBombCount()
     {
-        // Increase max bomb count
-        maxBombCount++;
-        var clone = textParticle.Clone( GameObject.WorldPosition + Vector3.Up * 100, GameObject.WorldRotation );
-        clone.GetComponent<ParticleTextRenderer>().Text = new Sandbox.TextRendering.Scope("+1 Bomb", color: Color.White, size: 128);
+		if ( MaxBombCount >= 10 )
+		{
+			var clone = textParticle.Clone( GameObject.WorldPosition + Vector3.Up * 100, GameObject.WorldRotation );
+			clone.GetComponent<ParticleTextRenderer>().Text = new Sandbox.TextRendering.Scope("Max Bombs Reached", color: Color.Red, size: 128);
+			return;
+		}
+		else
+		{
+			// Increase max bomb count
+			MaxBombCount++;
+			var clone = textParticle.Clone( GameObject.WorldPosition + Vector3.Up * 100, GameObject.WorldRotation );
+			clone.GetComponent<ParticleTextRenderer>().Text = new Sandbox.TextRendering.Scope( "+1 Bomb", color: Color.White, size: 128 );
+		}
+
     }
 
     public void IncreasePlayerSpeed()
     {
-        _playerMovement.Speed *= 1.15f;
-		moveSpeedUpgrades++;
-		var clone = textParticle.Clone( GameObject.WorldPosition + Vector3.Up * 100, GameObject.WorldRotation );
-        clone.GetComponent<ParticleTextRenderer>().Text = new Sandbox.TextRendering.Scope("+0.2 Speed", color: Color.White, size: 128);
+		if ( MoveSpeedUpgrades >= 7 )
+		{
+			var clone = textParticle.Clone( GameObject.WorldPosition + Vector3.Up * 100, GameObject.WorldRotation );
+			clone.GetComponent<ParticleTextRenderer>().Text = new Sandbox.TextRendering.Scope("Max Speed Reached", color: Color.Red, size: 128);
+			return;
+		}
+		else
+		{
+			_playerMovement.Speed *= 1.15f;
+			MoveSpeedUpgrades++;
+			var clone = textParticle.Clone( GameObject.WorldPosition + Vector3.Up * 100, GameObject.WorldRotation );
+			clone.GetComponent<ParticleTextRenderer>().Text = new Sandbox.TextRendering.Scope( "+0.2 Speed", color: Color.White, size: 128 );
+		}
+
     }
 
     [Button( "Increase Radius" )]

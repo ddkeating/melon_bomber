@@ -1,0 +1,31 @@
+ErrorLogComponent {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 2rem;
+    background: linear-gradient(350deg, #00000076 0%, #00000040 90%, #00000020 99%);
+    border-radius: 5px;
+    box-shadow: 1px 0 5px #c4a48d54;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    color: white;
+    z-index: 99;
+    max-width: 30rem;
+    transition: opacity .5s ease-out;
+    gap: 30px;
+}
+
+    ErrorLogComponent h2 {
+        font-size: 2rem;
+        flex-wrap: wrap;
+        max-width: 15rem;
+    }
+
+.icon {
+    position: relative;
+    object-fit: cover;
+    width: 5rem;
+    height: 5rem;
+}

@@ -24,7 +24,7 @@ public sealed class Bomb : Component
         _shockwaveParticle = GameObject.Children[1];
         _shockwaveParticle.Enabled = false;
         _shockwaveParticle.WorldPosition = GameObject.WorldPosition + Vector3.Up * 20;
-        _explosion = GameObject.Children[2];
+        _explosion = GameObject.Children.Find(c => c.Name == "Explosion");
         _explosion.Enabled = false;
         _explosion.WorldPosition = GameObject.WorldPosition + Vector3.Up * 20;
         _boxCollider = GameObject.GetComponent<BoxCollider>();
@@ -46,10 +46,12 @@ public sealed class Bomb : Component
 			return;
 		}
 
-
+		HandleBombType();
 	}
 	protected override void OnUpdate()
     {
+		if ( _bombManager.CurrentBombType == BombManager.BombType.Remote )
+			return;
         HandleTint();
         _bombDetonationTime -= Time.Delta;
         if ( _bombDetonationTime <= 0 )
@@ -76,7 +78,42 @@ public sealed class Bomb : Component
         _bombManager.OnBombDetonated( GameObject );
 	}
 
-    private void ExplodeOnOtherTiles()
+	private void HandleBombType()
+	{
+		switch ( _bombManager.CurrentBombType )
+		{
+			case BombManager.BombType.Remote:
+				RemoteBombHandler();
+				break;
+			case BombManager.BombType.Atomic:
+				AtomicBombHandler();
+				break;
+			default:
+				StandardBombHandler();
+				break;
+		}
+	}
+
+	private void RemoteBombHandler()
+	{
+		// Implement remote bomb detonation logic here
+		// Change model to bomb with remote detonator
+
+	}
+
+	private void AtomicBombHandler()
+	{
+		// Implement atomic bomb explosion logic here
+		GameObject.GetComponentInChildren<Decal>(includeDisabled: true).Enabled = true;
+
+	}
+
+	private void StandardBombHandler()
+	{
+		// Implement standard bomb explosion logic here
+	}
+
+	private void ExplodeOnOtherTiles()
     {
         var bombOnGrid = _mapLoader.GetGridPosition( GameObject.WorldPosition );
         var gridSize = MapLoader.GridSize;

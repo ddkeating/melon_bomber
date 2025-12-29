@@ -1,0 +1,65 @@
+@using System;
+@using Sandbox;
+@using Sandbox.UI;
+@inherits PanelComponent
+@namespace Sandbox
+
+<root style="opacity: @(isVisible ? "1" : "0");">
+    <Image class="icon" src="@(logType == LogType.Info ? infoIcon : logType == LogType.Warning ? warningIcon : errorIcon)" />
+    <h2>@message</h2>
+</root>
+
+@code
+{
+    public enum LogType
+    {
+        Info,
+        Warning,
+        Error
+    }
+    [Property(Title = "Info Icon"), Category("Icons")]
+    private string infoIcon { get; set; }
+    [Property(Title = "Warning Icon"), Category("Icons")]
+    private string warningIcon { get; set; }
+    [Property(Title = "Error Icon"), Category("Icons")]
+    private string errorIcon { get; set; }
+    public static LogType logType { get; set; } = LogType.Warning;
+    public static string message { get; set; } = "";
+    private static float displayDuration = 5.0f; // Duration to display the message in seconds
+    private static float remainingDuration;
+    private static bool isVisible = false;
+
+    protected override void OnStart()
+    {
+        if (Network.IsProxy) return;
+        isVisible = false;
+        StateHasChanged();
+    }
+
+    protected override void OnUpdate()
+    {
+        if (Network.IsProxy) return;
+        if (isVisible)
+        {
+            StateHasChanged();
+        }
+        if (remainingDuration > 0.0f)
+        {
+            remainingDuration -= Time.Delta;
+        }
+        else
+        {
+            // Hide the message when time's up
+            isVisible = false;
+        }
+    }
+
+    public static void SetMessage(string msg, LogType type)
+    {
+        message = msg;
+        logType = type;
+        remainingDuration = displayDuration;
+        isVisible = true;
+    }
+
+}

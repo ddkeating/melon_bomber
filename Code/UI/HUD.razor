@@ -20,15 +20,15 @@
         {
         <div class="right-container">
             <div class="power-up">
-                    <h1 class="power-up-value">@((bm?.maxBombCount) ?? 0)</h1>
+                    <h1 class="power-up-value">@((bm?.MaxBombCount) ?? 0)</h1>
                 <div class="power-up-icon" style="background-image: url('@BombPowerUpSprite');"></div>
             </div>
             <div class="power-up">
-                <h1 class="power-up-value">@((bm?.radius) ?? 0)</h1>
+                <h1 class="power-up-value">@((bm?.Radius) ?? 0)</h1>
                 <div class="power-up-icon" style="background-image: url('@RadiusPowerUpSprite');"></div>
             </div>
             <div class="power-up">
-                    <h1 class="power-up-value">@((bm?.moveSpeedUpgrades) ?? 0)</h1>
+                    <h1 class="power-up-value">@((bm?.MoveSpeedUpgrades) ?? 0)</h1>
                 <div class="power-up-icon" style="background-image: url('@SpeedPowerUpSprite');"></div>
             </div>
         </div>
@@ -99,9 +99,9 @@
     {
         return System.HashCode.Combine(
             GameManager.StartGame,
-            bm?.radius ?? 0,
-            bm?.moveSpeedUpgrades ?? 0,
-            bm?.maxBombCount ?? 0
+            bm?.Radius ?? 0,
+            bm?.MoveSpeedUpgrades ?? 0,
+            bm?.MaxBombCount ?? 0
         );
     }
 

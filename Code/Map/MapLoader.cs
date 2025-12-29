@@ -51,7 +51,7 @@ public sealed class MapLoader : Component, Component.INetworkListener
     private const int startingZPosition = 1000;
 
 	private const int PlayerCount = 4;
-	private const int MaxPowerUpCount = 2;
+	[Property, Title("Maximum Powerups"), Category("Gameplay Settings")]private int MaxPowerUpCount = 2;
 
 	private static readonly HashSet<(int, int)> lampPositions = new()
 	{
@@ -685,7 +685,7 @@ public sealed class MapLoader : Component, Component.INetworkListener
 	{
 		foreach (var pos in positions)
 		{
-			if ( MapLoader.IsValidGridPosition( pos ) )
+			if ( MapLoader.IsValidGridPosition( pos ) && (GetGridValue(pos) )!= GridCellType.IndestructibleWall && GetGridValue(pos) != GridCellType.Empty)
 				SetGridValue( pos, GridCellType.Empty );
 		}
 	}
