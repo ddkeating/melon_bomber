@@ -51,7 +51,7 @@ public sealed class CustomNetworkHelper : Component, Component.INetworkListener
 
 	Transform FindSpawnLocation()
 	{
-		// If they have spawn point set then use those
+		// Check for if player spawn points is being used.
 		if ( SpawnPoints is not null && SpawnPoints.Count > 0 )
 		{
 			foreach( var sp in SpawnPoints )

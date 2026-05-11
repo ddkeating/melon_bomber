@@ -1,0 +1,16 @@
+{
+  "AlbedoImage": "textures/brickfloorlayer/brick floor layer__color-2048x2048.png",
+  "RoughnessImage": "textures/brickfloorlayer/brick floor layer__roughness-2048x2048.png",
+  "NormalImage": "textures/brickfloorlayer/brick floor layer__normal-2048x2048.png",
+  "HeightImage": "textures/brickfloorlayer/brick floor layer__height-2048x2048.png",
+  "AOImage": "textures/brickfloorlayer/brick floor layer__ao-2048x2048.png",
+  "UVScale": 3,
+  "Metalness": 0.61157024,
+  "NormalStrength": 0.9181818,
+  "HeightBlendStrength": 0.59090906,
+  "DisplacementScale": 3.7603307,
+  "NoTiling": false,
+  "Surface": null,
+  "__references": [],
+  "__version": 0
+}

@@ -3,7 +3,7 @@ using Sandbox.Services.Players;
 
 public sealed class GameManager : Component
 {
-    public static bool StartGame { get; set; } = false;
+    public static bool StartGame { get; private set; } = false;
 	public static GameMode SelectedGameMode { get; set; } = GameMode.Classic;
 	public enum GameMode
 	{

@@ -14,12 +14,56 @@
 						remaps = 
 						[
 							{
-								from = "material.001.vmat"
-								to = "materials/brickwalllayers.vmat"
+								from = "dark-stone-brick layer.vmat"
+								to = "materials/map/brickfloorlayer.vmat"
 							},
 							{
-								from = "material.002.vmat"
-								to = "materials/brickfloorlayer.vmat"
+								from = "metal.002.vmat"
+								to = "materials/map/metal poles.vmat"
+							},
+							{
+								from = "metal.003.vmat"
+								to = "materials/map/metal poles.vmat"
+							},
+							{
+								from = "metal.004.vmat"
+								to = "materials/map/metal poles.vmat"
+							},
+							{
+								from = "metal.vmat"
+								to = "materials/map/metal poles.vmat"
+							},
+							{
+								from = "mortar texture.003.vmat"
+								to = "materials/map/mortar.vmat"
+							},
+							{
+								from = "mortar texture.004.vmat"
+								to = "materials/map/mortar.vmat"
+							},
+							{
+								from = "mortar texture.vmat"
+								to = "materials/map/mortar.vmat"
+							},
+							{
+								from = "brick--layer-wall.002.vmat"
+								to = "materials/map/brickwalllayers.vmat"
+							},
+							{
+								from = "brick--layer-wall.003.vmat"
+								to = "materials/map/brickwalllayers.vmat"
+							},
+							{
+								from = "brick--layer-wall.004.vmat"
+								to = "materials/map/brickwalllayers.vmat"
+							},
+							{
+								from = "brick--layer-wall.vmat"
+								to = "materials/map/brickwalllayers.vmat"
+							},
+							{
+								from = "mortar texture.002.vmat"
+								to = "materials/map/mortar.vmat"
 							},
 						]
 						use_global_default = false
@@ -35,22 +79,22 @@
 						_class = "RenderMeshFile"
 						filename = "models/arena-template.fbx"
 						import_translation = [ 0.0, 0.0, 0.0 ]
-						import_rotation = [ 0.0, 0.0, 0.0 ]
-						import_scale = 0.21
+						import_rotation = [ 0.0, 90.0, 0.0 ]
+						import_scale = 1.48
 						align_origin_x_type = "None"
 						align_origin_y_type = "None"
-						align_origin_z_type = "None"
+						align_origin_z_type = "BoundsMin"
 						parent_bone = ""
 						import_filter = 
 						{
 							exclude_by_default = true
 							exception_list = 
 							[
-								"Cube",
-								"Cube_001",
-								"Cube_002",
-								"Cube_003",
-								"Cube_004",
+								"Platform",
+								"Poles_Metal",
+								"Poles_Metal_001",
+								"Poles_Metal_002",
+								"Poles_Metal_003",
 							]
 						}
 					},
